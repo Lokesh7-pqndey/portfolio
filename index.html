@@ -1,0 +1,3233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lokesh Pandey — Data Analyst &amp; SQL Developer</title>
+  <meta name="description" content="Lokesh Pandey — Data Analyst &amp; SQL Developer specializing in PostgreSQL, Python, Power BI, and reproducible predictive analytics systems.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================================================
+       SANITY DESIGN SYSTEM TOKENS & RESET
+       Palette:
+         Accent Primary:   #fc4404 (Sanity vibrant orange/red-orange)
+         Accent Support 1: #fd9d7b (Peach/salmon highlight)
+         Accent Support 2: #bf3104 (Deep rust/burnt accent)
+         Muted Neutral:    #7c7c7c
+         Light Neutral:    #cccccc
+         Surfaces:         #0b0b0b (Dominant base), #141414, #1c1c1c, #212121
+       Typefaces:
+         Display / Headings: Waldenburg metric (Plus Jakarta Sans / Inter fallback)
+         Monospace:          IBM Plex Mono
+       Macrostructure:
+         Marquee Hero + Ghosted UI Mockup + Hairline Grid
+       ========================================================================= */
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* Base Surface & Background */
+      --bg-base: #0b0b0b;
+      --bg-surface: #141414;
+      --bg-surface-elevated: #1a1a1a;
+      --bg-surface-subtle: #212121;
+      --bg-surface-card: #121212;
+
+      /* Borders & Dividers */
+      --border-hairline: #212121;
+      --border-subtle: #2b2b2b;
+      --border-highlight: #3a3a3a;
+      --border-accent: rgba(252, 68, 4, 0.45);
+
+      /* Typography Colors (Lean on weight/scale for hierarchy) */
+      --text-primary: #ffffff;
+      --text-secondary: #cccccc;
+      --text-muted: #7c7c7c;
+      --text-dim: #4a4a4a;
+      --text-accent: #fc4404;
+
+      /* Brand Palette */
+      --color-accent: #fc4404;
+      --color-accent-soft: #fd9d7b;
+      --color-accent-dark: #bf3104;
+      --color-accent-glow: rgba(252, 68, 4, 0.22);
+
+      /* Typography Stacks */
+      --font-display: "Waldenburg", "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-body: "Waldenburg", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Monaco, Consolas, ui-monospace, monospace;
+
+      /* Radii (Sanity detected radii: 0px, 3px, 4px, 6px, 8px, 12px) */
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-lg: 10px;
+      --radius-pill: 9999px;
+
+      /* Layout */
+      --max-width: 1360px;
+      --header-height: 64px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-base);
+      color: var(--text-secondary);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    ::selection {
+      background: var(--color-accent);
+      color: #ffffff;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-base);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #262626;
+      border-radius: var(--radius-sm);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-accent-dark);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    /* =========================================================================
+       TYPOGRAPHY HIERARCHY (Sanity Waldenburg + Scale Rules)
+       ========================================================================= */
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      color: var(--text-primary);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    /* Massive Display Scale from DESIGN.md */
+    .display-hero {
+      font-size: clamp(3.2rem, 7.8vw, 6.75rem);
+      line-height: 0.96;
+      letter-spacing: -0.045em;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-transform: uppercase;
+    }
+
+    .display-section {
+      font-size: clamp(2.2rem, 4.8vw, 4.2rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .display-card {
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .mono-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .mono-accent {
+      color: var(--color-accent);
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 0 2.5rem;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .container {
+        padding: 0 3.5rem;
+      }
+    }
+
+    /* =========================================================================
+       BUTTONS & BADGES (IBM Plex Mono driven)
+       ========================================================================= */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      padding: 0.75rem 1.4rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    /* Primary Accent used sparingly */
+    .btn-accent {
+      background-color: var(--color-accent);
+      color: #ffffff;
+      border-color: var(--color-accent);
+    }
+    .btn-accent:hover {
+      background-color: #e03b00;
+      border-color: #e03b00;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(252, 68, 4, 0.3);
+    }
+
+    /* Subtle Surface Outline Button */
+    .btn-outline {
+      background-color: transparent;
+      color: var(--text-primary);
+      border-color: var(--border-highlight);
+    }
+    .btn-outline:hover {
+      background-color: var(--bg-surface-subtle);
+      border-color: var(--text-muted);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .btn-sm {
+      padding: 0.45rem 0.85rem;
+      font-size: 0.75rem;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--color-accent);
+      box-shadow: 0 0 8px var(--color-accent);
+      animation: pulseAnimation 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseAnimation {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.4;
+        transform: scale(0.85);
+      }
+    }
+
+    /* =========================================================================
+       STICKY NAVBAR (Sanity Minimalist Bar)
+       ========================================================================= */
+
+    header.sanity-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      width: 100%;
+      height: var(--header-height);
+      background-color: rgba(11, 11, 11, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-hairline);
+      transition: border-color 0.25s ease;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .brand-mark {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .brand-mark .brand-slash {
+      color: var(--color-accent);
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    @media (min-width: 900px) {
+      .nav-links {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color 0.15s ease;
+      position: relative;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-primary);
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--color-accent);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .mobile-menu-btn {
+      display: inline-flex;
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 0.45rem 0.65rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+
+    @media (min-width: 900px) {
+      .mobile-menu-btn {
+        display: none;
+      }
+    }
+
+    /* Mobile menu drawer */
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      gap: 1.25rem;
+    }
+    .mobile-menu.open {
+      display: flex;
+    }
+    .mobile-menu a {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    /* =========================================================================
+       MARQUEE HERO SECTION (Macrostructure: Marquee Hero)
+       ========================================================================= */
+
+    .hero-section {
+      position: relative;
+      padding-top: 3.5rem;
+      padding-bottom: 4.5rem;
+      border-bottom: 1px solid var(--border-hairline);
+      overflow: hidden;
+    }
+
+    /* Subtle Sanity grid background with hairline borders */
+    .hero-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .hero-eyebrow-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .hero-eyebrow .eyebrow-accent {
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+
+    .hero-headline-wrap {
+      max-width: 1200px;
+    }
+
+    .hero-headline-wrap .sub-lead {
+      margin-top: 1.5rem;
+      max-width: 780px;
+      font-size: 1.15rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .hero-headline-wrap .sub-lead strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .hero-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    /* =========================================================================
+       GHOSTED UI MOCKUP (Sanity Content Lake / Data Studio Concept)
+       ========================================================================= */
+
+    .studio-mockup-wrapper {
+      margin-top: 2rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .mockup-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 1.25rem;
+      background: #0f0f0f;
+      border-bottom: 1px solid var(--border-hairline);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .titlebar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .window-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2e2e2e;
+    }
+
+    .studio-id {
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .studio-id span {
+      color: var(--text-primary);
+    }
+
+    .titlebar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #96ff6f;
+      font-size: 0.72rem;
+    }
+    .status-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #96ff6f;
+      box-shadow: 0 0 6px #96ff6f;
+    }
+
+    .mockup-body {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 420px;
+    }
+
+    @media (min-width: 960px) {
+      .mockup-body {
+        grid-template-columns: 260px 1fr 310px;
+      }
+    }
+
+    /* Left pane: Schema & Document Trees */
+    .mockup-sidebar {
+      background: #111111;
+      border-right: 1px solid var(--border-hairline);
+      padding: 1.25rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .sidebar-block-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .schema-tree {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+    }
+
+    .schema-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.45rem 0.65rem;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .schema-item:hover, .schema-item.active {
+      background: var(--bg-surface-subtle);
+      color: var(--text-primary);
+    }
+    .schema-item.active {
+      border-left: 2px solid var(--color-accent);
+      color: #ffffff;
+    }
+
+    .schema-badge {
+      font-size: 0.65rem;
+      padding: 0.1rem 0.35rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+      color: var(--text-muted);
+    }
+
+    /* Main pane: Interactive Query & Execution Console */
+    .mockup-main {
+      background: #0b0b0b;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .query-tabs {
+      display: flex;
+      align-items: center;
+      background: #0d0d0d;
+      border-bottom: 1px solid var(--border-hairline);
+      padding: 0 0.5rem;
+      overflow-x: auto;
+    }
+
+    .q-tab {
+      padding: 0.75rem 1.1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .q-tab:hover {
+      color: var(--text-secondary);
+    }
+
+    .q-tab.active {
+      color: var(--text-primary);
+      border-bottom-color: var(--color-accent);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .code-console-pane {
+      padding: 1.25rem 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      line-height: 1.7;
+      color: #e6e6e6;
+      overflow-x: auto;
+      flex: 1;
+    }
+
+    .code-line {
+      display: block;
+    }
+    .c-kw { color: #fd9d7b; font-weight: 600; }
+    .c-fn { color: #cccccc; }
+    .c-str { color: #96ff6f; }
+    .c-num { color: #ffdedc; }
+    .c-comm { color: #5a5a5a; font-style: italic; }
+    .c-hl { color: var(--color-accent); font-weight: 600; }
+
+    .query-result-strip {
+      background: #111111;
+      border-top: 1px solid var(--border-hairline);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .meta-stat {
+      color: var(--text-muted);
+    }
+    .meta-stat strong {
+      color: var(--text-primary);
+    }
+
+    /* Right pane: Developer Profile Card (Clean Sanity Devtools look) */
+    .mockup-profile {
+      background: #101010;
+      border-left: 1px solid var(--border-hairline);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .author-photo-box {
+      width: 100%;
+      height: 200px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: #181818;
+      border: 1px solid var(--border-subtle);
+      position: relative;
+    }
+
+    .author-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 15%;
+      display: block;
+      filter: grayscale(18%) contrast(1.05);
+      transition: filter 0.3s ease, transform 0.4s ease;
+    }
+
+    .author-photo-box:hover img {
+      filter: grayscale(0%) contrast(1.1);
+      transform: scale(1.03);
+    }
+
+    .author-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .author-name {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .author-role {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .author-stats-mini {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .author-stat-box {
+      background: var(--bg-surface-subtle);
+      border: 1px solid var(--border-hairline);
+      padding: 0.6rem 0.75rem;
+      border-radius: var(--radius-sm);
+    }
+    .author-stat-num {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-primary);
+    }
+    .author-stat-lbl {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* =========================================================================
+       MARQUEE LOGO STRIP (Continuous Infinite Loop)
+       ========================================================================= */
+
+    .marquee-container {
+      width: 100%;
+      overflow: hidden;
+      background: #0b0b0b;
+      border-top: 1px solid var(--border-hairline);
+      border-bottom: 1px solid var(--border-hairline);
+      padding: 1.25rem 0;
+      position: relative;
+    }
+
+    /* Fade edges on marquee */
+    .marquee-container::before, .marquee-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .marquee-container::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg-base), transparent);
+    }
+    .marquee-container::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg-base), transparent);
+    }
+
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      width: max-content;
+      animation: marqueeScroll 32s linear infinite;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marqueeScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #a8a8a8;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .marquee-item:hover {
+      color: var(--text-primary);
+    }
+
+    .marquee-item .item-sep {
+      color: var(--color-accent);
+      font-weight: 400;
+      opacity: 0.85;
+    }
+
+    /* =========================================================================
+       HIGH-CONTRAST METRICS STRIP (Type Scale Driven)
+       ========================================================================= */
+
+    .kpi-section {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border-hairline);
+      background: #0d0d0d;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1px;
+      background: var(--border-hairline);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    @media (min-width: 600px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .kpi-card {
+      background: #0e0e0e;
+      padding: 2.25rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: background 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      background: #141414;
+    }
+
+    .kpi-number {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--text-primary);
+    }
+
+    .kpi-label {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .kpi-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* =========================================================================
+       FEATURED SYSTEMS (PROJECTS SHOWCASE)
+       Hairline borders, Sanity tags, Expandable Deep Dives
+       ========================================================================= */
+
+    .projects-section {
+      padding: 6.5rem 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .section-lead-p {
+      max-width: 680px;
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .projects-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2.25rem;
+    }
+
+    .project-card {
+      background: var(--bg-surface-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .project-card:hover {
+      border-color: var(--border-highlight);
+    }
+
+    .project-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1.25rem 2rem;
+      background: #111111;
+      border-bottom: 1px solid var(--border-hairline);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .project-index {
+      color: var(--color-accent);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .project-chips {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tech-pill {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid var(--border-hairline);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--radius-sm);
+      color: #b0b0b0;
+    }
+
+    .project-main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      padding: 2.25rem 2rem;
+    }
+
+    @media (min-width: 992px) {
+      .project-main-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+    }
+
+    .project-info-side {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .project-title {
+      font-size: clamp(1.6rem, 2.5vw, 2.25rem);
+      line-height: 1.15;
+      color: var(--text-primary);
+      letter-spacing: -0.035em;
+    }
+
+    .project-desc {
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+    }
+
+    .project-metrics-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      padding: 1rem 0;
+      border-top: 1px solid var(--border-hairline);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .p-metric {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .p-metric-val {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+    }
+
+    .p-metric-lbl {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .project-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    /* Code & Architecture Preview Panel */
+    .project-preview-panel {
+      background: #090909;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 1rem;
+      background: #0f0f0f;
+      border-bottom: 1px solid var(--border-hairline);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .preview-code-body {
+      padding: 1.15rem 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.65;
+      color: #cfcfcf;
+      overflow-x: auto;
+      flex: 1;
+    }
+
+    /* Expandable Deep Dive Highlighted Trigger */
+    .deep-dive-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #ffffff;
+      background: rgba(252, 68, 4, 0.12);
+      border: 1.5px solid var(--color-accent);
+      padding: 0.65rem 1.25rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      box-shadow: 0 0 16px rgba(252, 68, 4, 0.22), inset 0 0 10px rgba(252, 68, 4, 0.08);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      text-transform: uppercase;
+    }
+
+    .deep-dive-trigger:hover {
+      background: rgba(252, 68, 4, 0.25);
+      border-color: #ff571e;
+      box-shadow: 0 0 25px rgba(252, 68, 4, 0.45), inset 0 0 14px rgba(252, 68, 4, 0.16);
+      transform: translateY(-2px);
+      color: #ffffff;
+    }
+
+    .deep-dive-trigger .dd-icon {
+      color: var(--color-accent);
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+
+    .deep-dive-trigger .icon-arrow {
+      color: var(--color-accent);
+      font-size: 0.72rem;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .deep-dive-trigger.active {
+      background: var(--color-accent);
+      color: #ffffff;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 24px rgba(252, 68, 4, 0.5);
+    }
+
+    .deep-dive-trigger.active .dd-icon,
+    .deep-dive-trigger.active .icon-arrow {
+      color: #ffffff;
+    }
+
+    .deep-dive-drawer {
+      display: none;
+      background: #0c0c0c;
+      border-top: 1px solid var(--border-hairline);
+      padding: 2.25rem 2rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .deep-dive-drawer.open {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .drawer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 860px) {
+      .drawer-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .drawer-card {
+      background: #111111;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .drawer-card-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .drawer-card-p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .interview-pitch-box {
+      margin-top: 1.5rem;
+      background: #121212;
+      border-left: 3px solid var(--color-accent);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .interview-pitch-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.4rem;
+    }
+
+    .interview-pitch-text {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #b5b5b5;
+      font-style: italic;
+    }
+
+    /* =========================================================================
+       ENTERPRISE EXPERIENCE & CREDENTIALS (SANITY DESIGN STYLE)
+       ========================================================================= */
+
+    .experience-section {
+      padding: 6.5rem 0;
+      border-bottom: 1px solid var(--border-hairline);
+      background: #090909;
+    }
+
+    .exp-main-card {
+      background: var(--bg-surface-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      transition: border-color 0.25s ease;
+    }
+    .exp-main-card:hover {
+      border-color: var(--border-highlight);
+    }
+
+    .exp-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      border-bottom: 1px solid var(--border-hairline);
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .exp-title-block h3 {
+      font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+    }
+    .exp-company {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--color-accent);
+      font-weight: 600;
+      margin-top: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .exp-period {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-hairline);
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+    }
+
+    .exp-metrics-bar {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      padding: 0.85rem 1.25rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+    }
+
+    .exp-metric-item {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .exp-metric-item strong {
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+
+    .exp-highlights-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      font-size: 0.95rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+    }
+    .exp-highlights-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .exp-highlights-list li::before {
+      content: '⚡';
+      color: var(--color-accent);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .cert-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    @media (min-width: 768px) {
+      .cert-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .cert-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .cert-tile {
+      background: #111111;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .cert-tile:hover {
+      border-color: var(--border-highlight);
+      transform: translateY(-2px);
+    }
+    .cert-issuer {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--color-accent);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .cert-name {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.35;
+    }
+    .cert-meta {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    /* =========================================================================
+       CAPABILITIES & SCHEMA DEFINITION (SANITY TYPE SPEC LOOK)
+       ========================================================================= */
+
+    .capabilities-section {
+      padding: 6.5rem 0;
+      border-bottom: 1px solid var(--border-hairline);
+      background: #0d0d0d;
+    }
+
+    .cap-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .cap-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1100px) {
+      .cap-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .cap-box {
+      background: #111111;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .cap-box:hover {
+      border-color: var(--border-highlight);
+      transform: translateY(-2px);
+    }
+
+    .cap-head {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .cap-num {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+
+    .cap-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .cap-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .cap-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    .cap-item::before {
+      content: '—';
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    /* =========================================================================
+       INTERACTIVE SQL PLAYGROUND (LIVE SANITY STUDIO BENCH)
+       ========================================================================= */
+
+    .playground-section {
+      padding: 6.5rem 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .playground-card {
+      background: #111111;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .pg-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: #161616;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .pg-query-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pg-btn {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.45rem 0.9rem;
+      background: #0d0d0d;
+      border: 1px solid var(--border-hairline);
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .pg-btn:hover, .pg-btn.active {
+      background: var(--bg-surface-subtle);
+      color: #ffffff;
+      border-color: var(--color-accent);
+    }
+
+    .pg-run-btn {
+      background: var(--color-accent);
+      color: #ffffff;
+      border: 1px solid var(--color-accent);
+      font-weight: 600;
+    }
+    .pg-run-btn:hover {
+      background: #e03b00;
+    }
+
+    .pg-editor-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    @media (min-width: 900px) {
+      .pg-editor-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .pg-code-window {
+      padding: 1.5rem;
+      background: #080808;
+      border-right: 1px solid var(--border-hairline);
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      line-height: 1.7;
+      color: #e0e0e0;
+      overflow-x: auto;
+      min-height: 230px;
+    }
+
+    .pg-output-window {
+      padding: 1.5rem;
+      background: #0d0d0d;
+      overflow-x: auto;
+    }
+
+    .pg-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-align: left;
+    }
+
+    .pg-table th {
+      background: #141414;
+      color: var(--color-accent-soft);
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid var(--border-hairline);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .pg-table td {
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid #1a1a1a;
+      color: #d1d1d1;
+    }
+
+    .pg-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* =========================================================================
+       COLLABORATION & CONTACT TERMINAL
+       ========================================================================= */
+
+    .contact-section {
+      padding: 6.5rem 0;
+      border-bottom: 1px solid var(--border-hairline);
+      background: #0c0c0c;
+    }
+
+    .contact-box {
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      background: #111111;
+      padding: 3.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    @media (min-width: 860px) {
+      .contact-box {
+        padding: 4.5rem 3.5rem;
+      }
+    }
+
+    .contact-header {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 820px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .contact-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .contact-tile {
+      background: #141414;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .contact-tile:hover {
+      border-color: var(--border-highlight);
+      transform: translateY(-2px);
+    }
+
+    .contact-tile-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .contact-tile-val {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      word-break: break-all;
+    }
+
+    .copy-notification {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: #96ff6f;
+    }
+
+    /* =========================================================================
+       FOOTER (SANITY MONOCHROME MINIMAL)
+       ========================================================================= */
+
+    footer.sanity-footer {
+      padding: 3rem 0;
+      background: #080808;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-nav a:hover {
+      color: var(--text-primary);
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .back-to-top {
+      background: transparent;
+      border: 1px solid var(--border-hairline);
+      color: var(--text-muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      transition: all 0.15s ease;
+    }
+    .back-to-top:hover {
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =======================================================================
+       STICKY MINIMAL NAVIGATION
+       ======================================================================= -->
+  <header class="sanity-header" id="sanityHeader">
+    <div class="container nav-inner">
+      <div class="nav-brand">
+        <a href="#home" class="brand-mark">
+          <span>&lt;lokesh</span><span class="brand-slash">.studio</span><span> /&gt;</span>
+        </a>
+        <div class="pill-badge" style="display:none;" id="navStatusPill">
+          <span class="pulse-dot"></span>
+          <span>AVAILABLE FOR ROLES</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#home" class="nav-link active">// OVERVIEW</a></li>
+          <li><a href="#experience" class="nav-link">// EXPERIENCE</a></li>
+          <li><a href="#projects" class="nav-link">// SYSTEMS</a></li>
+          <li><a href="#capabilities" class="nav-link">// CAPABILITIES</a></li>
+          <li><a href="#playground" class="nav-link">// SQL CONSOLE</a></li>
+          <li><a href="#contact" class="nav-link">// CONNECT</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="resume.pdf" target="_blank" class="btn btn-outline btn-sm">
+          <span>RESUME PDF</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </a>
+        <a href="#contact" class="btn btn-accent btn-sm">
+          <span>GET IN TOUCH</span>
+          <span>→</span>
+        </a>
+        <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Toggle navigation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Dropdown -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home" onclick="toggleMobileNav()">// 01 OVERVIEW</a>
+    <a href="#experience" onclick="toggleMobileNav()">// 02 EXPERIENCE &amp; IMPACT</a>
+    <a href="#projects" onclick="toggleMobileNav()">// 03 SYSTEMS &amp; PROJECTS</a>
+    <a href="#capabilities" onclick="toggleMobileNav()">// 04 CAPABILITIES &amp; STACK</a>
+    <a href="#playground" onclick="toggleMobileNav()">// 05 SQL CONSOLE</a>
+    <a href="#contact" onclick="toggleMobileNav()">// 06 CONNECT</a>
+  </div>
+
+  <main>
+    <!-- =====================================================================
+         MARQUEE HERO SECTION
+         High-contrast dark typography + ghosted studio preview
+         ===================================================================== -->
+    <section class="hero-section" id="home">
+      <div class="hero-bg-grid"></div>
+
+      <div class="container hero-content">
+        <!-- Eyebrow Tag -->
+        <div class="hero-eyebrow-row">
+          <div class="hero-eyebrow">
+            <span class="pulse-dot"></span>
+            <span>SYSTEM RUNTIME &bull; DATA ANALYST &amp; SQL DEVELOPER</span>
+          </div>
+          <div class="pill-badge">
+            <span class="mono-accent">LOCATION:</span>
+            <span>INDIA &bull; REMOTE WORLDWIDE</span>
+          </div>
+        </div>
+
+        <!-- Massive Waldenburg Headline -->
+        <div class="hero-headline-wrap">
+          <h1 class="display-hero">
+            STRUCTURED DATA.<br>
+            MEASURABLE ALPHA.
+          </h1>
+          <p class="sub-lead">
+            I am <strong>Lokesh Pandey</strong> — engineering reproducible PostgreSQL data pipelines,
+            multi-layer CTE workflows, automated Python transformations, and high-impact Power BI executive suites
+            from complex business transactions.
+          </p>
+
+          <div class="hero-actions-row">
+            <a href="#projects" class="btn btn-accent">
+              <span>EXPLORE SYSTEMS (05)</span>
+              <span>↓</span>
+            </a>
+            <a href="https://github.com/Lokesh7-pqndey?tab=repositories" target="_blank" class="btn btn-outline">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              <span>GITHUB REPOSITORIES (16)</span>
+              <span>↗</span>
+            </a>
+            <button class="btn btn-outline" onclick="copyEmail()">
+              <span id="copyEmailBtnText">COPY EMAIL</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Ghosted Developer Studio UI Mockup -->
+        <div class="studio-mockup-wrapper">
+          <div class="mockup-titlebar">
+            <div class="titlebar-left">
+              <div class="window-dots">
+                <span class="window-dot"></span>
+                <span class="window-dot"></span>
+                <span class="window-dot"></span>
+              </div>
+              <span class="studio-id">LOKESH DATA STUDIO // <span>PROD_v2.4</span></span>
+            </div>
+            <div class="titlebar-right">
+              <span class="meta-stat">ENGINE: <strong>POSTGRESQL 16 + PYTHON 3.12</strong></span>
+              <span class="status-badge">CONNECTED (4ms)</span>
+            </div>
+          </div>
+
+          <div class="mockup-body">
+            <!-- Sidebar Schema Tree -->
+            <div class="mockup-sidebar">
+              <div>
+                <div class="sidebar-block-title">Active Schemas</div>
+                <ul class="schema-tree">
+                  <li class="schema-item active" onclick="loadHeroTab(0)">
+                    <span>swiggy_analytics.sql</span>
+                    <span class="schema-badge">148K</span>
+                  </li>
+                  <li class="schema-item" onclick="loadHeroTab(1)">
+                    <span>mutual_fund_alpha.dax</span>
+                    <span class="schema-badge">50+</span>
+                  </li>
+                  <li class="schema-item" onclick="loadHeroTab(2)">
+                    <span>fintech_hr_comp.sql</span>
+                    <span class="schema-badge">5K</span>
+                  </li>
+                  <li class="schema-item" onclick="loadHeroTab(3)">
+                    <span>retail_forecast.py</span>
+                    <span class="schema-badge">50K</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <div class="sidebar-block-title">Pipeline Runtime</div>
+                <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); display:flex; flex-direction:column; gap:0.4rem;">
+                  <div>Latency: <strong style="color:var(--text-primary)">8.2ms</strong></div>
+                  <div>Cache Hit: <strong style="color:#96ff6f">99.4%</strong></div>
+                  <div>Dirty Records: <strong style="color:var(--color-accent)">0</strong></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Central Live Query / Code Execution Area -->
+            <div class="mockup-main">
+              <div class="query-tabs">
+                <div class="q-tab active" id="htab0" onclick="loadHeroTab(0)">swiggy_pareto_gmv.sql</div>
+                <div class="q-tab" id="htab1" onclick="loadHeroTab(1)">mutual_fund_sharpe.dax</div>
+                <div class="q-tab" id="htab2" onclick="loadHeroTab(2)">fintech_salary_lag.sql</div>
+                <div class="q-tab" id="htab3" onclick="loadHeroTab(3)">rfm_clustering.py</div>
+              </div>
+
+              <div class="code-console-pane" id="heroCodePane">
+                <!-- Injected via JavaScript -->
+              </div>
+
+              <div class="query-result-strip">
+                <div>
+                  <span class="meta-stat">OUTPUT: <strong id="heroOutputStat">148,204 rows processed in 0.014s</strong></span>
+                </div>
+                <div style="display:flex; gap:1.25rem;">
+                  <span class="meta-stat">NULL_HANDLED: <strong style="color:#96ff6f">100%</strong></span>
+                  <span class="meta-stat">DIALECT: <strong style="color:var(--color-accent-soft)">ANSI SQL:2016</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Profile Side -->
+            <div class="mockup-profile">
+              <div class="author-photo-box">
+                <img src="lokesh.png" alt="Lokesh Pandey">
+              </div>
+
+              <div class="author-details">
+                <div class="author-name">Lokesh Pandey</div>
+                <div class="author-role">// DATA ANALYST &amp; SQL DEVELOPER</div>
+                <div class="pill-badge" style="margin-top:0.4rem; justify-content:flex-start; font-size:0.68rem;">
+                  <span class="pulse-dot"></span>
+                  <span>IMMEDIATE ONBOARDING</span>
+                </div>
+              </div>
+
+              <div class="author-stats-mini">
+                <div class="author-stat-box">
+                  <div class="author-stat-num">16</div>
+                  <div class="author-stat-lbl">REPOSITORIES</div>
+                </div>
+                <div class="author-stat-box">
+                  <div class="author-stat-num">148K+</div>
+                  <div class="author-stat-lbl">ROWS ANALYZED</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         INFINITE TECH MARQUEE (Partner / Tech Logo Strip in Sanity Style)
+         ===================================================================== -->
+    <section class="marquee-container" aria-label="Technical Capabilities Marquee">
+      <div class="marquee-track">
+        <span class="marquee-item">POSTGRESQL <span class="item-sep">//</span></span>
+        <span class="marquee-item">PYTHON 3.12 <span class="item-sep">//</span></span>
+        <span class="marquee-item">ADVANCED SQL CTES <span class="item-sep">//</span></span>
+        <span class="marquee-item">POWER BI <span class="item-sep">//</span></span>
+        <span class="marquee-item">DAX DATA MODELING <span class="item-sep">//</span></span>
+        <span class="marquee-item">PANDAS &amp; NUMPY <span class="item-sep">//</span></span>
+        <span class="marquee-item">WINDOW FUNCTIONS <span class="item-sep">//</span></span>
+        <span class="marquee-item">SCIKIT-LEARN <span class="item-sep">//</span></span>
+        <span class="marquee-item">STAR SCHEMA <span class="item-sep">//</span></span>
+        <span class="marquee-item">RFM CLUSTERING <span class="item-sep">//</span></span>
+        <span class="marquee-item">EXPLORATORY DATA ANALYSIS <span class="item-sep">//</span></span>
+        <span class="marquee-item">JUPYTER LAB <span class="item-sep">//</span></span>
+        <span class="marquee-item">GIT &amp; GITHUB <span class="item-sep">//</span></span>
+        <!-- Duplicated for seamless infinite scroll -->
+        <span class="marquee-item">POSTGRESQL <span class="item-sep">//</span></span>
+        <span class="marquee-item">PYTHON 3.12 <span class="item-sep">//</span></span>
+        <span class="marquee-item">ADVANCED SQL CTES <span class="item-sep">//</span></span>
+        <span class="marquee-item">POWER BI <span class="item-sep">//</span></span>
+        <span class="marquee-item">DAX DATA MODELING <span class="item-sep">//</span></span>
+        <span class="marquee-item">PANDAS &amp; NUMPY <span class="item-sep">//</span></span>
+        <span class="marquee-item">WINDOW FUNCTIONS <span class="item-sep">//</span></span>
+        <span class="marquee-item">SCIKIT-LEARN <span class="item-sep">//</span></span>
+        <span class="marquee-item">STAR SCHEMA <span class="item-sep">//</span></span>
+        <span class="marquee-item">RFM CLUSTERING <span class="item-sep">//</span></span>
+        <span class="marquee-item">EXPLORATORY DATA ANALYSIS <span class="item-sep">//</span></span>
+        <span class="marquee-item">JUPYTER LAB <span class="item-sep">//</span></span>
+        <span class="marquee-item">GIT &amp; GITHUB <span class="item-sep">//</span></span>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         KPI & IMPACT STRIP (Lean on Type Weight + Scale)
+         ===================================================================== -->
+    <section class="kpi-section">
+      <div class="container">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-number">4+ Yrs</div>
+            <div class="kpi-label">Enterprise Experience</div>
+            <div class="kpi-sub">Business operations and inventory analytics at Reliance Retail.</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-number">15%</div>
+            <div class="kpi-label">Variance Reduced</div>
+            <div class="kpi-sub">Stock variance reduced across 1,000+ SKUs via SAP &amp; root cause audits.</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-number">150K+</div>
+            <div class="kpi-label">Orders Modeled</div>
+            <div class="kpi-sub">Relational records and 100K users evaluated in Swiggy pipeline.</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-number">0.91</div>
+            <div class="kpi-label">ROC AUC Accuracy</div>
+            <div class="kpi-sub">Random Forest churn predictive model deployed via live Flask API.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         ENTERPRISE EXPERIENCE & CERTIFICATIONS (RELIANCE RETAIL & CREDENTIALS)
+         ===================================================================== -->
+    <section class="experience-section" id="experience">
+      <div class="container">
+        <div class="section-header-block">
+          <div class="section-eyebrow">
+            <span>// 02 ENTERPRISE TRACK RECORD &amp; EXPERIENCE</span>
+          </div>
+          <h2 class="display-section">
+            ENTERPRISE DATA &amp; OPERATIONS.
+          </h2>
+          <p class="section-lead-p">
+            Over 4 years of proven hands-on impact at Reliance Retail managing 1,000+ SKUs with SAP,
+            reducing stock variance by 15%, and engineering executive reporting pipelines for strategic decision makers.
+          </p>
+        </div>
+
+        <!-- Main Reliance Retail Experience Card -->
+        <div class="exp-main-card">
+          <div class="exp-header-row">
+            <div class="exp-title-block">
+              <span class="mono-tag" style="color:var(--color-accent); font-weight:700;">ENTERPRISE ROLE // 4+ YEARS</span>
+              <h3>Department Manager — Data &amp; Operations</h3>
+              <div class="exp-company">
+                <span>RELIANCE RETAIL (MANAGED SERVICES)</span>
+                <span>&bull;</span>
+                <span style="color:var(--text-muted); font-weight:400;">Rudrapur, Uttarakhand, India</span>
+              </div>
+            </div>
+            <div class="exp-period">
+              OCT 2021 – PRESENT (4+ YEARS)
+            </div>
+          </div>
+
+          <div class="exp-metrics-bar">
+            <div class="exp-metric-item">PORTFOLIO: <strong>1,000+ SKUs TRACKED</strong></div>
+            <div class="exp-metric-item">IMPACT: <strong>15% STOCK VARIANCE REDUCED</strong></div>
+            <div class="exp-metric-item">STACK: <strong>SAP ERP &bull; ADVANCED EXCEL &bull; SQL</strong></div>
+          </div>
+
+          <ul class="exp-highlights-list">
+            <li>
+              <span><strong>SAP Inventory &amp; Stock Movement:</strong> Managed daily inventory telemetry across 1,000+ SKUs using SAP, monitoring stock turnover rates, shrinkage vectors, and reorder latency.</span>
+            </li>
+            <li>
+              <span><strong>Root Cause Variance Reduction:</strong> Spearheaded weekly root cause audits and inventory reconciliation across multiple retail departments, achieving a quantifiable 15% reduction in stock variance.</span>
+            </li>
+            <li>
+              <span><strong>Executive KPI Reporting:</strong> Designed and automated multi-tab Excel reporting suites (advanced formulas, pivot tables, and KPI aggregations) delivering weekly performance briefings to department heads.</span>
+            </li>
+            <li>
+              <span><strong>Data Cleansing &amp; Procurement Accuracy:</strong> Executed end-to-end data validation between SAP database extracts and frontline sales records to ensure 100% data integrity for procurement, staffing, and seasonal demand planning.</span>
+            </li>
+            <li>
+              <span><strong>Cross-Functional Leadership:</strong> Collaborated directly with supply chain logistics, vendor management, and floor operations to turn raw inventory telemetry into actionable executive decisions.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Virtual Skill Development Program Card -->
+        <div class="exp-main-card" style="padding: 2rem 2.5rem; background: #0e0e0e;">
+          <div class="exp-header-row" style="margin-bottom: 1rem; padding-bottom: 1rem;">
+            <div class="exp-title-block">
+              <span class="mono-tag" style="color:var(--color-accent-soft); font-weight:700;">APPLIED FELLOWSHIP // 6-MONTH INTENSIVE</span>
+              <h3 style="font-size: 1.35rem;">Data Science &amp; AI Virtual Skill Development Program</h3>
+              <div class="exp-company" style="color: var(--text-secondary); font-size: 0.82rem;">
+                <span>LABMANTRIX PVT. LTD.</span>
+                <span>&bull;</span>
+                <span style="color:var(--text-muted); font-weight:400;">Virtual Data Science Immersion</span>
+              </div>
+            </div>
+            <div class="exp-period">
+              SEP 2025 – MAR 2026
+            </div>
+          </div>
+          <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+            Completed rigorous six-month industry curriculum building end-to-end analytics pipelines, data preprocessing protocols, exploratory data analysis (EDA), statistical validation, and machine learning models in Python, SQL, and Power BI on real-world datasets.
+          </p>
+        </div>
+
+        <!-- Industry Certifications & Job Simulations Grid -->
+        <div style="margin-top: 3.5rem;">
+          <div class="section-eyebrow" style="margin-bottom: 0.75rem;">
+            <span>// VERIFIED CREDENTIALS &amp; SIMULATIONS</span>
+          </div>
+          <h3 style="font-size: 1.5rem; letter-spacing: -0.03em; margin-bottom: 0.5rem; color: var(--text-primary);">
+            Industry Accreditations &amp; Institutional Certifications
+          </h3>
+
+          <div class="cert-grid">
+            <div class="cert-tile">
+              <div class="cert-issuer">ODINSCHOOL &bull; OCT 2025</div>
+              <div class="cert-name">Certified Data Science Professional</div>
+              <div class="cert-meta">CREDENTIAL: <strong>ODIN1005371</strong></div>
+            </div>
+
+            <div class="cert-tile">
+              <div class="cert-issuer">BOSTON CONSULTING GROUP &bull; FORAGE</div>
+              <div class="cert-name">Data for Decision Makers</div>
+              <div class="cert-meta">BCG Job Simulation Certification</div>
+            </div>
+
+            <div class="cert-tile">
+              <div class="cert-issuer">DELOITTE &bull; FORAGE</div>
+              <div class="cert-name">Data Analytics Job Simulation</div>
+              <div class="cert-meta">Enterprise Business Analytics</div>
+            </div>
+
+            <div class="cert-tile">
+              <div class="cert-issuer">FORAGE GLOBAL</div>
+              <div class="cert-name">Markets Quantitative Analysis</div>
+              <div class="cert-meta">MQA Financial Analytics Simulation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         FEATURED SYSTEMS (05 PRODUCTION CASE STUDIES)
+         ===================================================================== -->
+    <section class="projects-section" id="projects">
+      <div class="container">
+        <div class="section-header-block">
+          <div class="section-eyebrow">
+            <span>// 03 FEATURED ARCHITECTURE</span>
+          </div>
+          <h2 class="display-section">
+            ENGINEERED DATA SYSTEMS.
+          </h2>
+          <p class="section-lead-p">
+            Five production-grade analytics pipelines, machine learning models, and executive BI architectures
+            built on verifiable datasets. Every project includes public repositories and reproducible logic.
+          </p>
+        </div>
+
+        <div class="projects-list">
+
+          <!-- PROJECT 01: SWIGGY -->
+          <div class="project-card">
+            <div class="project-header-bar">
+              <span class="project-index">[ SYSTEM 01 / 05 ] &bull; CONSUMER ANALYTICS &amp; CHURN ML</span>
+              <div class="project-chips">
+                <span class="tech-pill">SQL Pipeline</span>
+                <span class="tech-pill">Python</span>
+                <span class="tech-pill">Random Forest (0.91 AUC)</span>
+                <span class="tech-pill">Flask API</span>
+                <span class="tech-pill">Power BI</span>
+              </div>
+            </div>
+
+            <div class="project-main-grid">
+              <div class="project-info-side">
+                <h3 class="project-title">Swiggy End-to-End Analytics &amp; Churn Prediction</h3>
+                <p class="project-desc">
+                  Tackled an 87.76% customer churn challenge by engineering a 5-table relational SQL pipeline across 150,000+ orders
+                  and 100,000 users. Engineered RFM behavioral features, trained a 0.91 ROC AUC Random Forest churn classifier,
+                  deployed a live scoring Flask API, and built a 5-page Power BI dashboard.
+                </p>
+
+                <div class="project-metrics-row">
+                  <div class="p-metric">
+                    <div class="p-metric-val">150K+</div>
+                    <div class="p-metric-lbl">Orders Analyzed</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">0.91</div>
+                    <div class="p-metric-lbl">ROC AUC Churn ML</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">&#8377;964M</div>
+                    <div class="p-metric-lbl">Revenue Modeled</div>
+                  </div>
+                </div>
+
+                <div class="project-actions">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive1', this)">
+                    <span class="dd-icon">⚡</span>
+                    <span class="dd-text">EXPAND DEEP DIVE</span>
+                    <span class="icon-arrow">▼</span>
+                  </button>
+                  <a href="https://github.com/Lokesh7-pqndey/Swiggy-End-To-End-Data-Analytics" target="_blank" class="btn btn-outline btn-sm">
+                    <span>VIEW REPOSITORY</span>
+                    <span>↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="project-preview-panel">
+                <div class="preview-header">
+                  <span>swiggy_pipeline.py // ANALYSIS KERNEL</span>
+                  <span class="mono-accent">EXEC: 0.02s</span>
+                </div>
+                <div class="preview-code-body">
+<span class="c-comm"># Pareto Concentration &amp; Peak Hour Surge</span>
+<span class="c-kw">import</span> pandas <span class="c-kw">as</span> pd
+
+df[<span class="c-str">'order_hour'</span>] = pd.to_datetime(df[<span class="c-str">'timestamp'</span>]).dt.hour
+dinner_surge = df[df[<span class="c-str">'order_hour'</span>].between(<span class="c-num">19</span>, <span class="c-num">22</span>)]
+
+<span class="c-comm"># Top 18.5% vendors driving 73.2% GMV</span>
+vendor_rev = df.groupby(<span class="c-str">'restaurant_id'</span>)[<span class="c-str">'price'</span>].sum().sort_values(ascending=<span class="c-kw">False</span>)
+cum_rev_share = vendor_rev.cumsum() / vendor_rev.sum()
+pareto_point = (cum_rev_share &lt;= <span class="c-num">0.732</span>).mean()
+<span class="c-kw">print</span>(f<span class="c-str">"High GMV Partners: {pareto_point*100:.1f}%"</span>)
+                </div>
+              </div>
+            </div>
+
+            <!-- Deep Dive Drawer -->
+            <div class="deep-dive-drawer" id="deepDive1">
+              <div class="drawer-grid">
+                <div class="drawer-card">
+                  <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
+                  <p class="drawer-card-p">
+                    Food delivery platforms battle an alarming 87.76% customer churn rate. Without automated predictive modeling, marketing teams burn capital on indiscriminate discounts rather than targeting high-risk, high-CLV accounts before drop-off.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">02 // Technical Execution (WHAT)</div>
+                  <p class="drawer-card-p">
+                    Engineered 5-table relational PostgreSQL pipeline across 150K+ orders and 100K users. Constructed RFM behavioral metrics (recency as top predictor), trained a Random Forest classifier with 0.91 ROC AUC, and deployed a live Flask scoring API for automated retention triggers.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">03 // Quantified Findings</div>
+                  <p class="drawer-card-p">
+                    &bull; <strong>Revenue Concentration:</strong> 11,419 restaurants drive 80% of INR 964M total revenue.<br>
+                    &bull; <strong>Predictive Accuracy:</strong> Model achieved 0.91 ROC AUC for early customer churn identification.<br>
+                    &bull; <strong>Executive Visibility:</strong> 5-page Power BI dashboard delivering real-time city- and restaurant-level DAX metrics.
+                  </p>
+                </div>
+              </div>
+
+              <div class="interview-pitch-box">
+                <div class="interview-pitch-title">Executive 60-Second Interview Elevator Pitch</div>
+                <p class="interview-pitch-text">
+                  "In my Swiggy analytics project, I solved an 87.76% customer churn problem across 150K+ orders. I engineered a 5-table SQL pipeline revealing that 80% of INR 964M revenue stems from 11,419 restaurant partners. Using RFM behavioral features, I trained a 0.91 ROC AUC Random Forest classifier and deployed it via a live Flask API for real-time retention triggers."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROJECT 02: MUTUAL FUND BI -->
+          <div class="project-card">
+            <div class="project-header-bar">
+              <span class="project-index">[ SYSTEM 02 / 05 ] &bull; WEALTHTECH BI</span>
+              <div class="project-chips">
+                <span class="tech-pill">Power BI</span>
+                <span class="tech-pill">DAX Modeling</span>
+                <span class="tech-pill">Star Schema</span>
+                <span class="tech-pill">Python</span>
+              </div>
+            </div>
+
+            <div class="project-main-grid">
+              <div class="project-info-side">
+                <h3 class="project-title">Mutual Fund Analysis &amp; Alpha Dashboard</h3>
+                <p class="project-desc">
+                  Institutional investment analytics suite integrating Python data transformation with an interactive Power BI dashboard.
+                  Models dynamic Sharpe ratios, historical drawdown risk, sector allocations, and performance benchmarking vs NIFTY 50.
+                </p>
+
+                <div class="project-metrics-row">
+                  <div class="p-metric">
+                    <div class="p-metric-val">&#8377;4.2M</div>
+                    <div class="p-metric-lbl">AUM Analyzed</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">+18.4%</div>
+                    <div class="p-metric-lbl">Peak Alpha</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">15+</div>
+                    <div class="p-metric-lbl">DAX Measures</div>
+                  </div>
+                </div>
+
+                <div class="project-actions">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive2', this)">
+                    <span class="dd-icon">⚡</span>
+                    <span class="dd-text">EXPAND DEEP DIVE</span>
+                    <span class="icon-arrow">▼</span>
+                  </button>
+                  <a href="https://github.com/Lokesh7-pqndey/mutual-fund-analysis-Dashboard-Python-PowerBI" target="_blank" class="btn btn-outline btn-sm">
+                    <span>VIEW REPOSITORY</span>
+                    <span>↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="project-preview-panel">
+                <div class="preview-header">
+                  <span>measures.dax // STAR SCHEMA DAX ENGINE</span>
+                  <span class="mono-accent">COMPILED</span>
+                </div>
+                <div class="preview-code-body">
+<span class="c-comm">// Dynamic Sharpe Ratio Measure (Rf = 6.5%)</span>
+Sharpe_Ratio = 
+<span class="c-kw">VAR</span> FundReturn = [CAGR_3Y]
+<span class="c-kw">VAR</span> RiskFree = <span class="c-num">0.065</span>
+<span class="c-kw">VAR</span> AnnualizedVol = [Annualized_Volatility]
+<span class="c-kw">RETURN</span>
+  <span class="c-fn">DIVIDE</span>(FundReturn - RiskFree, AnnualizedVol, <span class="c-num">0</span>)
+
+<span class="c-comm">// Maximum Drawdown Isolation</span>
+Max_Drawdown = 
+<span class="c-kw">VAR</span> PeakNAV = <span class="c-fn">CALCULATE</span>(<span class="c-fn">MAX</span>(Fact_NAV[NAV]), <span class="c-fn">ALLSELECTED</span>(Dim_Date))
+<span class="c-kw">RETURN</span>
+  <span class="c-fn">DIVIDE</span>(<span class="c-fn">MIN</span>(Fact_NAV[NAV]) - PeakNAV, PeakNAV, <span class="c-num">0</span>)
+                </div>
+              </div>
+            </div>
+
+            <!-- Deep Dive Drawer -->
+            <div class="deep-dive-drawer" id="deepDive2">
+              <div class="drawer-grid">
+                <div class="drawer-card">
+                  <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
+                  <p class="drawer-card-p">
+                    Raw historical returns mislead investors by hiding volatility. The objective was to build an institutional evaluation framework benchmarking funds against NIFTY 50 to isolate true Alpha from market Beta.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">02 // Technical Execution (WHAT)</div>
+                  <p class="drawer-card-p">
+                    Engineered Star Schema model (Fact_NAV, Dim_Fund, Dim_Date, Dim_Benchmark). Authored 15+ dynamic DAX measures including 3Y/5Y CAGR, Sharpe Ratio (Rf = 6.5%), and Maximum Drawdown.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">03 // Quantified Findings</div>
+                  <p class="drawer-card-p">
+                    &bull; <strong>Small-Cap Risk:</strong> Several high-flying funds suffered -32% peak-to-trough drawdowns.<br>
+                    &bull; <strong>Expense Ratios:</strong> Funds charging &gt;2.1% failed to reliably outperform low-cost index benchmarks.<br>
+                    &bull; <strong>Alpha Leaders:</strong> Isolated 8 mid-cap funds generating consistent +3.4% excess Alpha.
+                  </p>
+                </div>
+              </div>
+
+              <div class="interview-pitch-box">
+                <div class="interview-pitch-title">Executive 60-Second Interview Elevator Pitch</div>
+                <p class="interview-pitch-text">
+                  "Leveraging my business background, I built a Power BI analytics suite for mutual funds. Rather than basic dashboards, I engineered a Star Schema model with DAX measures for Sharpe Ratio and Drawdown, allowing wealth managers to evaluate whether higher expense fees produced genuine Alpha."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROJECT 03: FINTECH HR SQL -->
+          <div class="project-card">
+            <div class="project-header-bar">
+              <span class="project-index">[ SYSTEM 03 / 05 ] &bull; POSTGRESQL ENGINE</span>
+              <div class="project-chips">
+                <span class="tech-pill">PostgreSQL</span>
+                <span class="tech-pill">Window Functions</span>
+                <span class="tech-pill">Multi-level CTEs</span>
+                <span class="tech-pill">Salary Percentiles</span>
+              </div>
+            </div>
+
+            <div class="project-main-grid">
+              <div class="project-info-side">
+                <h3 class="project-title">Fintech HR Analytics SQL System</h3>
+                <p class="project-desc">
+                  Complex PostgreSQL codebase evaluating workforce compensation bands, attrition dynamics, and department budget disparities
+                  using multi-level CTEs, dense rankings, rolling windows, and executive summary rollups.
+                </p>
+
+                <div class="project-metrics-row">
+                  <div class="p-metric">
+                    <div class="p-metric-val">5,000+</div>
+                    <div class="p-metric-lbl">Employee Records</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">NTILE(4)</div>
+                    <div class="p-metric-lbl">Quartile Modeling</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">18%</div>
+                    <div class="p-metric-lbl">Comp Inversion Identified</div>
+                  </div>
+                </div>
+
+                <div class="project-actions">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive3', this)">
+                    <span class="dd-icon">⚡</span>
+                    <span class="dd-text">EXPAND DEEP DIVE</span>
+                    <span class="icon-arrow">▼</span>
+                  </button>
+                  <a href="https://github.com/Lokesh7-pqndey/Fintech-HR-Analytics-SQL-Project" target="_blank" class="btn btn-outline btn-sm">
+                    <span>VIEW REPOSITORY</span>
+                    <span>↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="project-preview-panel">
+                <div class="preview-header">
+                  <span>fintech_hr.sql // WINDOW FUNCTIONS &amp; CTES</span>
+                  <span class="mono-accent">ANSI SQL</span>
+                </div>
+                <div class="preview-code-body">
+<span class="c-kw">WITH</span> Dept_Comp_Bands <span class="c-kw">AS</span> (
+  <span class="c-kw">SELECT</span> 
+    emp_id, department, salary,
+    <span class="c-fn">NTILE</span>(<span class="c-num">4</span>) <span class="c-kw">OVER</span> (<span class="c-kw">PARTITION BY</span> department <span class="c-kw">ORDER BY</span> salary <span class="c-kw">DESC</span>) <span class="c-kw">AS</span> comp_quartile,
+    <span class="c-fn">AVG</span>(salary) <span class="c-kw">OVER</span> (<span class="c-kw">PARTITION BY</span> department) <span class="c-kw">AS</span> dept_avg_salary,
+    <span class="c-fn">LAG</span>(salary) <span class="c-kw">OVER</span> (<span class="c-kw">PARTITION BY</span> department <span class="c-kw">ORDER BY</span> hire_date) <span class="c-kw">AS</span> prev_hire_salary
+  <span class="c-kw">FROM</span> employees
+)
+<span class="c-kw">SELECT</span> * <span class="c-kw">FROM</span> Dept_Comp_Bands <span class="c-kw">WHERE</span> comp_quartile = <span class="c-num">1</span>;
+                </div>
+              </div>
+            </div>
+
+            <!-- Deep Dive Drawer -->
+            <div class="deep-dive-drawer" id="deepDive3">
+              <div class="drawer-grid">
+                <div class="drawer-card">
+                  <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
+                  <p class="drawer-card-p">
+                    Fintech scale-ups bleed millions through unmonitored compensation anomalies, post-probation turnover cliffs, and department budget disparities.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">02 // Technical Execution (WHAT)</div>
+                  <p class="drawer-card-p">
+                    Architected production-ready SQL scripts leveraging NTILE(4) quartiles, PERCENT_RANK() pay benchmarking, LAG() turnover velocity, and cumulative payroll CTEs.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">03 // Quantified Findings</div>
+                  <p class="drawer-card-p">
+                    &bull; <strong>Comp Inversion:</strong> Senior engineering hires earned 18% higher than established top-quartile tenured peers, driving flight risk.<br>
+                    &bull; <strong>Turnover Cliff:</strong> Identified voluntary exit spikes between month 14 and 18 post-onboarding.
+                  </p>
+                </div>
+              </div>
+
+              <div class="interview-pitch-box">
+                <div class="interview-pitch-title">Executive 60-Second Interview Elevator Pitch</div>
+                <p class="interview-pitch-text">
+                  "In this project, I used advanced PostgreSQL CTEs and window functions like NTILE and LAG to identify structural compensation gaps. I discovered an 18% compensation inversion between new senior hires and tenured staff, providing executive leadership with actionable retention data."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROJECT 04: CUSTOMER SEGMENTATION -->
+          <div class="project-card">
+            <div class="project-header-bar">
+              <span class="project-index">[ SYSTEM 04 / 05 ] &bull; MACHINE LEARNING</span>
+              <div class="project-chips">
+                <span class="tech-pill">Python</span>
+                <span class="tech-pill">Scikit-learn</span>
+                <span class="tech-pill">K-Means</span>
+                <span class="tech-pill">RFM Analysis</span>
+              </div>
+            </div>
+
+            <div class="project-main-grid">
+              <div class="project-info-side">
+                <h3 class="project-title">Customer Segmentation via Machine Learning</h3>
+                <p class="project-desc">
+                  Unsupervised machine learning model utilizing K-Means clustering and RFM (Recency, Frequency, Monetary)
+                  framework to segment customer bases into high-value cohorts, at-risk clients, and growth targets.
+                </p>
+
+                <div class="project-metrics-row">
+                  <div class="p-metric">
+                    <div class="p-metric-val">4</div>
+                    <div class="p-metric-lbl">Optimal Clusters</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">0.74</div>
+                    <div class="p-metric-lbl">Silhouette Score</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">PCA</div>
+                    <div class="p-metric-lbl">2D Dimensionality</div>
+                  </div>
+                </div>
+
+                <div class="project-actions">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive4', this)">
+                    <span class="dd-icon">⚡</span>
+                    <span class="dd-text">EXPAND DEEP DIVE</span>
+                    <span class="icon-arrow">▼</span>
+                  </button>
+                  <a href="https://github.com/Lokesh7-pqndey/customer-segmentation" target="_blank" class="btn btn-outline btn-sm">
+                    <span>VIEW REPOSITORY</span>
+                    <span>↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="project-preview-panel">
+                <div class="preview-header">
+                  <span>cluster_model.py // K-MEANS &amp; RFM PIPELINE</span>
+                  <span class="mono-accent">SCIKIT-LEARN</span>
+                </div>
+                <div class="preview-code-body">
+<span class="c-kw">from</span> sklearn.cluster <span class="c-kw">import</span> KMeans
+<span class="c-kw">from</span> sklearn.preprocessing <span class="c-kw">import</span> StandardScaler
+
+<span class="c-comm"># Normalize RFM Matrix</span>
+scaler = StandardScaler()
+rfm_scaled = scaler.fit_transform(rfm[[<span class="c-str">'Recency'</span>, <span class="c-str">'Frequency'</span>, <span class="c-str">'Monetary'</span>]])
+
+<span class="c-comm"># Train optimal K=4 clusters with high separation</span>
+kmeans = KMeans(n_clusters=<span class="c-num">4</span>, random_state=<span class="c-num">42</span>, n_init=<span class="c-num">10</span>)
+rfm[<span class="c-str">'Cluster'</span>] = kmeans.fit_predict(rfm_scaled)
+                </div>
+              </div>
+            </div>
+
+            <!-- Deep Dive Drawer -->
+            <div class="deep-dive-drawer" id="deepDive4">
+              <div class="drawer-grid">
+                <div class="drawer-card">
+                  <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
+                  <p class="drawer-card-p">
+                    Blanket marketing campaigns waste promotional budget on low-intent churners while underserving high-value champions. Businesses require algorithmic customer segmentation to maximize CLV (Customer Lifetime Value).
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">02 // Technical Execution (WHAT)</div>
+                  <p class="drawer-card-p">
+                    Built an RFM (Recency, Frequency, Monetary) matrix with log transformations to handle skewness. Standardized feature space, analyzed Elbow inertia &amp; Silhouette scores, and modeled K-Means with K=4 clusters alongside PCA 2D projections.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">03 // Quantified Findings</div>
+                  <p class="drawer-card-p">
+                    &bull; <strong>4 Discrete Cohorts:</strong> Champions (14%), Loyal Regulars (32%), Potential Churn (28%), At-Risk Inactive (26%).<br>
+                    &bull; <strong>High Cluster Separation:</strong> Achieved a 0.74 Silhouette coefficient.<br>
+                    &bull; <strong>Revenue Salvage:</strong> Tailored re-engagement for "Potential Churn" targets estimated a 19% GMV retention.
+                  </p>
+                </div>
+              </div>
+
+              <div class="interview-pitch-box">
+                <div class="interview-pitch-title">Executive 60-Second Interview Elevator Pitch</div>
+                <p class="interview-pitch-text">
+                  "In this machine learning project, I applied K-Means clustering on customer transaction logs using the RFM framework. Rather than arbitrary rules, I mathematically segmented users into 4 distinct behavioral clusters with a 0.74 silhouette score, giving growth teams clear targets for retention and personalized discount allocation."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROJECT 05: RETAIL ANALYTICS -->
+          <div class="project-card">
+            <div class="project-header-bar">
+              <span class="project-index">[ SYSTEM 05 / 05 ] &bull; BUSINESS INTELLIGENCE</span>
+              <div class="project-chips">
+                <span class="tech-pill">Python</span>
+                <span class="tech-pill">Pandas</span>
+                <span class="tech-pill">Sales Forecasting</span>
+                <span class="tech-pill">Inventory EDA</span>
+              </div>
+            </div>
+
+            <div class="project-main-grid">
+              <div class="project-info-side">
+                <h3 class="project-title">Retail Analytics &amp; Sales Forecasting</h3>
+                <p class="project-desc">
+                  Enterprise retail analytics project investigating store-level sales velocity, seasonal demand fluctuations,
+                  and inventory stockout risks across multi-category store networks.
+                </p>
+
+                <div class="project-metrics-row">
+                  <div class="p-metric">
+                    <div class="p-metric-val">&#8377;12.8M</div>
+                    <div class="p-metric-lbl">Analyzed GMV</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">24.3%</div>
+                    <div class="p-metric-lbl">Gross Margin</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">50K+</div>
+                    <div class="p-metric-lbl">Active SKUs</div>
+                  </div>
+                </div>
+
+                <div class="project-actions">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive5', this)">
+                    <span class="dd-icon">⚡</span>
+                    <span class="dd-text">EXPAND DEEP DIVE</span>
+                    <span class="icon-arrow">▼</span>
+                  </button>
+                  <a href="https://github.com/Lokesh7-pqndey/Retail-Analytics" target="_blank" class="btn btn-outline btn-sm">
+                    <span>VIEW REPOSITORY</span>
+                    <span>↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="project-preview-panel">
+                <div class="preview-header">
+                  <span>forecast_sales.py // VELOCITY &amp; STOCKOUT MODEL</span>
+                  <span class="mono-accent">RETAIL BI</span>
+                </div>
+                <div class="preview-code-body">
+<span class="c-comm"># Calculate Inventory Days of Supply (DoS)</span>
+sku_metrics = df.groupby(<span class="c-str">'sku_id'</span>).agg({
+    <span class="c-str">'units_sold'</span>: <span class="c-str">'mean'</span>,
+    <span class="c-str">'current_stock'</span>: <span class="c-str">'last'</span>,
+    <span class="c-str">'unit_margin'</span>: <span class="c-str">'mean'</span>
+})
+sku_metrics[<span class="c-str">'days_of_supply'</span>] = sku_metrics[<span class="c-str">'current_stock'</span>] / sku_metrics[<span class="c-str">'units_sold'</span>]
+stockout_risk = sku_metrics[sku_metrics[<span class="c-str">'days_of_supply'</span>] &lt; <span class="c-num">7</span>]
+                </div>
+              </div>
+            </div>
+
+            <!-- Deep Dive Drawer -->
+            <div class="deep-dive-drawer" id="deepDive5">
+              <div class="drawer-grid">
+                <div class="drawer-card">
+                  <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
+                  <p class="drawer-card-p">
+                    Multi-store retail operations suffer millions in lost revenue from stockouts on high-velocity items and locked working capital in slow-moving inventory without store-level visibility.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">02 // Technical Execution (WHAT)</div>
+                  <p class="drawer-card-p">
+                    Evaluated &#8377;12.8M in retail GMV across 50,000+ SKUs using Python and Pandas. Computed Days of Supply (DoS), sell-through rates, gross margin return on inventory (GMROI), and seasonal demand fluctuations.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">03 // Quantified Findings</div>
+                  <p class="drawer-card-p">
+                    &bull; <strong>Stockout Risk:</strong> Top 12% revenue-driving SKUs had &lt;4 days of safety inventory during peak weekend traffic.<br>
+                    &bull; <strong>Margin Disconnect:</strong> 24.3% gross margin masked a 35% discount erosion on unmoving seasonal lines.<br>
+                    &bull; <strong>Capital Reallocation:</strong> Flagged &#8377;1.8M in dead capital in zero-velocity SKUs for clearance liquidation.
+                  </p>
+                </div>
+              </div>
+
+              <div class="interview-pitch-box">
+                <div class="interview-pitch-title">Executive 60-Second Interview Elevator Pitch</div>
+                <p class="interview-pitch-text">
+                  "In my Retail Analytics project, I analyzed &#8377;12.8M in GMV across 50,000 SKUs. I built inventory velocity and Days-of-Supply models that exposed critical stockout vulnerabilities in top 12% revenue SKUs while flagging &#8377;1.8M in dead capital, demonstrating how data-driven inventory staging protects retail gross margins."
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TECHNICAL CAPABILITIES (SANITY SCHEMA ARCHITECTURE GRID)
+         ===================================================================== -->
+    <section class="capabilities-section" id="capabilities">
+      <div class="container">
+        <div class="section-header-block">
+          <div class="section-eyebrow">
+            <span>// 03 SYSTEM CAPABILITIES</span>
+          </div>
+          <h2 class="display-section">
+            SCHEMA &amp; STACK ARCHITECTURE.
+          </h2>
+          <p class="section-lead-p">
+            High-integrity toolset covering relational database engineering, analytical modeling,
+            predictive statistics, and clean executive visual reporting.
+          </p>
+        </div>
+
+        <div class="cap-grid">
+          <!-- Card 1 -->
+          <div class="cap-box">
+            <div class="cap-head">
+              <span class="cap-num">01 // RELATIONAL</span>
+              <h3 class="cap-title">SQL &amp; Data Warehousing</h3>
+            </div>
+            <ul class="cap-items">
+              <li class="cap-item">PostgreSQL &amp; MySQL Engines</li>
+              <li class="cap-item">Multi-level CTEs &amp; Subqueries</li>
+              <li class="cap-item">Window Functions (NTILE, LAG, LEAD, RANK)</li>
+              <li class="cap-item">Index Optimization &amp; Query Plans</li>
+              <li class="cap-item">Database Normalization &amp; Integrity</li>
+            </ul>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="cap-box">
+            <div class="cap-head">
+              <span class="cap-num">02 // VISUALIZATION</span>
+              <h3 class="cap-title">BI &amp; Executive Dashboards</h3>
+            </div>
+            <ul class="cap-items">
+              <li class="cap-item">Power BI Desktop &amp; Cloud</li>
+              <li class="cap-item">Complex DAX Calculations &amp; Measures</li>
+              <li class="cap-item">Star Schema &amp; Snowflake Modeling</li>
+              <li class="cap-item">Interactive Slicers &amp; Drill-throughs</li>
+              <li class="cap-item">Matplotlib &amp; Seaborn Visualizations</li>
+            </ul>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="cap-box">
+            <div class="cap-head">
+              <span class="cap-num">03 // COMPUTATION</span>
+              <h3 class="cap-title">Python Analytics &amp; ML</h3>
+            </div>
+            <ul class="cap-items">
+              <li class="cap-item">Pandas &amp; NumPy Pipeline Architectures</li>
+              <li class="cap-item">Scikit-learn Algorithms (K-Means, PCA)</li>
+              <li class="cap-item">RFM Cohort Customer Segmentation</li>
+              <li class="cap-item">Sales Forecasting &amp; Time-Series EDA</li>
+              <li class="cap-item">Data Cleansing &amp; Outlier Imputation</li>
+            </ul>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="cap-box">
+            <div class="cap-head">
+              <span class="cap-num">04 // PRODUCTION</span>
+              <h3 class="cap-title">Workflows &amp; Tooling</h3>
+            </div>
+            <ul class="cap-items">
+              <li class="cap-item">Git &amp; GitHub Version Control</li>
+              <li class="cap-item">Jupyter Lab &amp; VS Code</li>
+              <li class="cap-item">ETL Pipeline Orchestration</li>
+              <li class="cap-item">Excel Power Query &amp; Advanced Formulas</li>
+              <li class="cap-item">Documented Reproducible Notebooks</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         INTERACTIVE SQL PLAYGROUND (LIVE STUDIO WORKBENCH)
+         ===================================================================== -->
+    <section class="playground-section" id="playground">
+      <div class="container">
+        <div class="section-header-block">
+          <div class="section-eyebrow">
+            <span>// 04 INTERACTIVE QUERY CONSOLE</span>
+          </div>
+          <h2 class="display-section">
+            SIMULATE LIVE SQL QUERIES.
+          </h2>
+          <p class="section-lead-p">
+            Test real SQL transformations directly in the browser. Select any query template below
+            to inspect the query syntax and instant execution result dataset.
+          </p>
+        </div>
+
+        <div class="playground-card">
+          <div class="pg-toolbar">
+            <div class="pg-query-selector">
+              <button class="pg-btn active" id="pgb0" onclick="loadPlayground(0)">Q1: Swiggy Dinner Rush Surge</button>
+              <button class="pg-btn" id="pgb1" onclick="loadPlayground(1)">Q2: Fintech Salary Inversion</button>
+              <button class="pg-btn" id="pgb2" onclick="loadPlayground(2)">Q3: Mutual Fund Sharpe &amp; Alpha</button>
+            </div>
+            <div>
+              <button class="btn btn-sm pg-run-btn" onclick="executeCurrentQuery()">
+                <span>RUN QUERY</span>
+                <span>▶</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="pg-editor-grid">
+            <div class="pg-code-window" id="pgCodeWindow">
+              <!-- Code loaded via JS -->
+            </div>
+            <div class="pg-output-window" id="pgOutputWindow">
+              <!-- Output table loaded via JS -->
+            </div>
+          </div>
+
+          <div class="query-result-strip">
+            <span class="meta-stat">STATUS: <strong style="color:#96ff6f" id="pgStatus">READY // 0 ERRORS</strong></span>
+            <span class="meta-stat">EXECUTION LATENCY: <strong id="pgLatency">6.8ms</strong></span>
+            <span class="meta-stat">TARGET ENGINE: <strong style="color:var(--color-accent-soft)">PostgreSQL 16.2</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         COLLABORATION & CONTACT TERMINAL
+         ===================================================================== -->
+    <section class="contact-section" id="contact">
+      <div class="container">
+        <div class="contact-box">
+          <div class="contact-header">
+            <div class="section-eyebrow">
+              <span>// 05 GET IN TOUCH</span>
+            </div>
+            <h2 class="display-section">
+              LET'S BUILD SOMETHING DATA-DRIVEN.
+            </h2>
+            <p class="section-lead-p">
+              Actively seeking full-time and high-impact contract opportunities as a
+              <strong>Data Analyst</strong>, <strong>SQL Developer</strong>, or <strong>BI Specialist</strong>.
+              Immediate availability for remote positions worldwide or onsite roles in India.
+            </p>
+          </div>
+
+          <div class="contact-grid">
+            <!-- Email Tile -->
+            <div class="contact-tile" onclick="copyEmail()">
+              <div class="contact-tile-label">
+                <span>DIRECT EMAIL</span>
+                <span class="copy-notification" id="copyNotice">COPIED TO CLIPBOARD!</span>
+              </div>
+              <div class="contact-tile-val">pandeylokesh87@gmail.com</div>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-accent); margin-top: auto;">
+                CLICK TO COPY EMAIL ↗
+              </div>
+            </div>
+
+            <!-- Phone / WhatsApp Tile -->
+            <a href="tel:+919456382363" class="contact-tile">
+              <div class="contact-tile-label">
+                <span>DIRECT PHONE / WHATSAPP</span>
+                <span>↗</span>
+              </div>
+              <div class="contact-tile-val">+91-9456382363</div>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-accent-soft); margin-top: auto;">
+                UDHAM SINGH NAGAR, UTTARAKHAND
+              </div>
+            </a>
+
+            <!-- GitHub Tile -->
+            <a href="https://github.com/Lokesh7-pqndey?tab=repositories" target="_blank" class="contact-tile">
+              <div class="contact-tile-label">
+                <span>GITHUB REPOSITORIES</span>
+                <span>↗</span>
+              </div>
+              <div class="contact-tile-val">github.com/Lokesh7-pqndey</div>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-top: auto;">
+                16 PUBLIC WORKFLOWS
+              </div>
+            </a>
+
+            <!-- LinkedIn Tile -->
+            <a href="https://linkedin.com/in/lokesh-pandey-2265b5218" target="_blank" class="contact-tile">
+              <div class="contact-tile-label">
+                <span>LINKEDIN NETWORK</span>
+                <span>↗</span>
+              </div>
+              <div class="contact-tile-val">linkedin.com/in/lokesh-pandey</div>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-top: auto;">
+                DIRECT MESSAGE CHANNEL
+              </div>
+            </a>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1.25rem; border-top:1px solid var(--border-hairline); padding-top:2rem;">
+            <div style="display:flex; align-items:center; gap:0.6rem;">
+              <span class="pulse-dot"></span>
+              <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-secondary);">
+                AVAILABLE IMMEDIATELY FOR TECHNICAL INTERVIEWS
+              </span>
+            </div>
+            <div style="display:flex; align-items:center; gap:0.85rem; flex-wrap:wrap;">
+              <a href="resume.pdf" target="_blank" class="btn btn-outline">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>DOWNLOAD RESUME PDF</span>
+              </a>
+              <a href="mailto:pandeylokesh87@gmail.com" class="btn btn-accent">
+                <span>SEND EMAIL MESSAGE</span>
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =======================================================================
+       SANITY MINIMALIST FOOTER
+       ======================================================================= -->
+  <footer class="sanity-footer">
+    <div class="container footer-inner">
+      <div class="footer-left">
+        <span>&copy; 2026 LOKESH PANDEY</span>
+        <span style="color:var(--border-subtle)">/</span>
+        <span>ALL RIGHTS RESERVED</span>
+      </div>
+
+      <ul class="footer-nav">
+        <li><a href="#home">// TOP</a></li>
+        <li><a href="#projects">// SYSTEMS</a></li>
+        <li><a href="#capabilities">// STACK</a></li>
+        <li><a href="#contact">// CONNECT</a></li>
+      </ul>
+
+      <div class="footer-right">
+        <span style="font-size:0.7rem; color:#666666;">SANITY DESIGN SPEC 2026</span>
+        <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ TOP</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =======================================================================
+       CLIENT SCRIPTS: STUDIO TABS, SQL CONSOLE, DEEP DIVES, COPY EMAIL
+       ======================================================================= -->
+  <script>
+    // --- Mobile Menu Toggle ---
+    function toggleMobileNav() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('open');
+    }
+
+    // --- Hero Ghosted Studio Data ---
+    const heroSnippets = [
+      {
+        code: `<span class="c-comm">-- Swiggy Orders Peak Bottleneck & Pareto GMV Share</span>
+<span class="c-kw">WITH</span> City_Orders <span class="c-kw">AS</span> (
+  <span class="c-kw">SELECT</span> 
+    city,
+    restaurant_name,
+    <span class="c-fn">COUNT</span>(order_id) <span class="c-kw">AS</span> total_orders,
+    <span class="c-fn">SUM</span>(order_amount) <span class="c-kw">AS</span> total_gmv,
+    <span class="c-fn">EXTRACT</span>(HOUR <span class="c-kw">FROM</span> order_time) <span class="c-kw">AS</span> order_hour
+  <span class="c-kw">FROM</span> swiggy_orders
+  <span class="c-kw">GROUP BY</span> city, restaurant_name, <span class="c-fn">EXTRACT</span>(HOUR <span class="c-kw">FROM</span> order_time)
+)
+<span class="c-kw">SELECT</span> 
+  city,
+  <span class="c-fn">SUM</span>(total_gmv) <span class="c-kw">AS</span> city_revenue,
+  <span class="c-fn">ROUND</span>(<span class="c-fn">AVG</span>(total_orders), <span class="c-num">2</span>) <span class="c-kw">AS</span> avg_hourly_throughput
+<span class="c-kw">FROM</span> City_Orders
+<span class="c-kw">WHERE</span> order_hour <span class="c-kw">BETWEEN</span> <span class="c-num">19</span> <span class="c-kw">AND</span> <span class="c-num">22</span>
+<span class="c-kw">GROUP BY</span> city
+<span class="c-kw">ORDER BY</span> city_revenue <span class="c-kw">DESC</span>;`,
+        stat: "148,204 rows processed in 0.014s"
+      },
+      {
+        code: `<span class="c-comm">// Mutual Fund Performance Alpha vs NIFTY 50 Benchmark</span>
+Sharpe_Ratio = 
+<span class="c-kw">VAR</span> AnnualizedReturn = [CAGR_3Y]
+<span class="c-kw">VAR</span> RiskFreeRate = <span class="c-num">0.065</span> <span class="c-comm">// 6.5% G-Sec Yield</span>
+<span class="c-kw">VAR</span> PortfolioVolatility = [Annualized_StDev]
+<span class="c-kw">RETURN</span>
+  <span class="c-fn">DIVIDE</span>(AnnualizedReturn - RiskFreeRate, PortfolioVolatility, <span class="c-num">0</span>)
+
+Alpha_Excess = 
+<span class="c-kw">VAR</span> FundBeta = [Fund_Beta_Nifty]
+<span class="c-kw">RETURN</span>
+  [CAGR_3Y] - (RiskFreeRate + FundBeta * ([Benchmark_CAGR] - RiskFreeRate))`,
+        stat: "50+ WealthTech Schemes Benchmarked (DAX Model Loaded)"
+      },
+      {
+        code: `<span class="c-comm">-- Fintech HR Window CTEs: Comp-Ratio Inversion Discovery</span>
+<span class="c-kw">WITH</span> Ranked_Salaries <span class="c-kw">AS</span> (
+  <span class="c-kw">SELECT</span> 
+    emp_id, department, tenure_months, salary,
+    <span class="c-fn">NTILE</span>(<span class="c-num">4</span>) <span class="c-kw">OVER</span> (<span class="c-kw">PARTITION BY</span> department <span class="c-kw">ORDER BY</span> salary <span class="c-kw">DESC</span>) <span class="c-kw">AS</span> comp_quartile,
+    <span class="c-fn">PERCENT_RANK</span>() <span class="c-kw">OVER</span> (<span class="c-kw">PARTITION BY</span> department <span class="c-kw">ORDER BY</span> salary) <span class="c-kw">AS</span> dept_percentile,
+    <span class="c-fn">AVG</span>(salary) <span class="c-kw">OVER</span> (<span class="c-kw">PARTITION BY</span> department) <span class="c-kw">AS</span> dept_mean
+  <span class="c-kw">FROM</span> employees
+)
+<span class="c-kw">SELECT</span> * <span class="c-kw">FROM</span> Ranked_Salaries <span class="c-kw">WHERE</span> comp_quartile = <span class="c-num">1</span> <span class="c-kw">AND</span> tenure_months &lt; <span class="c-num">12</span>;`,
+        stat: "5,000+ HR Records Evaluated with Window Partitions"
+      },
+      {
+        code: `<span class="c-comm"># Retail Analytics: Sales Velocity & Inventory Stockout EDA</span>
+<span class="c-kw">import</span> pandas <span class="c-kw">as</span> pd
+<span class="c-kw">import</span> numpy <span class="c-kw">as</span> np
+
+df[<span class="c-str">'daily_velocity'</span>] = df[<span class="c-str">'units_sold'</span>] / df[<span class="c-str">'active_days'</span>]
+df[<span class="c-str">'stockout_flag'</span>] = np.where(df[<span class="c-str">'on_hand_inventory'</span>] &lt; (df[<span class="c-str">'daily_velocity'</span>] * <span class="c-num">7</span>), <span class="c-num">1</span>, <span class="c-num">0</span>)
+
+risk_summary = df.groupby(<span class="c-str">'category'</span>).agg(
+    total_gmv=(<span class="c-str">'gmv'</span>, <span class="c-str">'sum'</span>),
+    stockout_skus=(<span class="c-str">'stockout_flag'</span>, <span class="c-str">'sum'</span>)
+).reset_index()`,
+        stat: "50K+ SKUs Analyzed & Inventory Velocity Computed"
+      }
+    ];
+
+    function loadHeroTab(idx) {
+      for (let i = 0; i < 4; i++) {
+        const tab = document.getElementById('htab' + i);
+        if (tab) tab.classList.toggle('active', i === idx);
+      }
+      const codePane = document.getElementById('heroCodePane');
+      const outputStat = document.getElementById('heroOutputStat');
+      if (codePane && heroSnippets[idx]) {
+        codePane.innerHTML = heroSnippets[idx].code;
+        outputStat.textContent = heroSnippets[idx].stat;
+      }
+    }
+    loadHeroTab(0);
+
+    // --- Interactive SQL Playground Console ---
+    const playgroundQueries = [
+      {
+        code: `<span class="c-comm">-- Query 1: Swiggy Dinner Rush Hourly Demand Bottleneck</span>
+<span class="c-kw">SELECT</span> 
+  <span class="c-fn">EXTRACT</span>(HOUR <span class="c-kw">FROM</span> order_time) <span class="c-kw">AS</span> hour_of_day,
+  <span class="c-fn">COUNT</span>(order_id) <span class="c-kw">AS</span> volume,
+  <span class="c-fn">ROUND</span>(<span class="c-fn">AVG</span>(delivery_time_mins), <span class="c-num">1</span>) <span class="c-kw">AS</span> avg_sla_mins,
+  <span class="c-fn">SUM</span>(order_value) <span class="c-kw">AS</span> gmv_inr
+<span class="c-kw">FROM</span> swiggy_orders
+<span class="c-kw">WHERE</span> order_date &gt;= <span class="c-str">'2024-01-01'</span>
+<span class="c-kw">GROUP BY</span> <span class="c-fn">EXTRACT</span>(HOUR <span class="c-kw">FROM</span> order_time)
+<span class="c-kw">ORDER BY</span> volume <span class="c-kw">DESC</span>
+<span class="c-kw">LIMIT</span> <span class="c-num">5</span>;`,
+        headers: ["hour_of_day", "volume", "avg_sla_mins", "gmv_inr"],
+        rows: [
+          ["20:00 (8 PM)", "38,410", "42.4 mins (+30%)", "₹6,145,600"],
+          ["21:00 (9 PM)", "34,890", "39.8 mins (+22%)", "₹5,582,400"],
+          ["19:00 (7 PM)", "28,650", "34.1 mins (+8%)", "₹4,584,000"],
+          ["13:00 (1 PM)", "21,240", "31.2 mins", "₹3,398,400"],
+          ["14:00 (2 PM)", "14,820", "28.5 mins", "₹2,371,200"]
+        ],
+        latency: "5.4ms"
+      },
+      {
+        code: `<span class="c-comm">-- Query 2: Fintech HR Comp Inversion Detection CTE</span>
+<span class="c-kw">WITH</span> Tenure_Groups <span class="c-kw">AS</span> (
+  <span class="c-kw">SELECT</span> 
+    emp_id, department, title, salary,
+    <span class="c-kw">CASE</span> 
+      <span class="c-kw">WHEN</span> tenure_months &lt; <span class="c-num">12</span> <span class="c-kw">THEN</span> <span class="c-str">'New Hire (&lt;1Y)'</span>
+      <span class="c-kw">ELSE</span> <span class="c-str">'Tenured (&gt;2Y)'</span>
+    <span class="c-kw">END</span> <span class="c-kw">AS</span> cohort,
+    <span class="c-fn">AVG</span>(salary) <span class="c-kw">OVER</span> (<span class="c-kw">PARTITION BY</span> department, title) <span class="c-kw">AS</span> title_mean_salary
+  <span class="c-kw">FROM</span> employees
+)
+<span class="c-kw">SELECT</span> 
+  title, cohort,
+  <span class="c-fn">ROUND</span>(<span class="c-fn">AVG</span>(salary), <span class="c-num">0</span>) <span class="c-kw">AS</span> avg_salary_inr,
+  <span class="c-fn">COUNT</span>(emp_id) <span class="c-kw">AS</span> headcount
+<span class="c-kw">FROM</span> Tenure_Groups
+<span class="c-kw">GROUP BY</span> title, cohort
+<span class="c-kw">ORDER BY</span> title, avg_salary_inr <span class="c-kw">DESC</span>;`,
+        headers: ["title", "cohort", "avg_salary_inr", "headcount"],
+        rows: [
+          ["Senior Backend Engineer", "New Hire (<1Y)", "₹2,450,000 (+18%)", "14"],
+          ["Senior Backend Engineer", "Tenured (>2Y)", "₹2,075,000", "28"],
+          ["Lead Data Analyst", "New Hire (<1Y)", "₹1,850,000 (+12%)", "8"],
+          ["Lead Data Analyst", "Tenured (>2Y)", "₹1,650,000", "19"],
+          ["DevOps Specialist", "New Hire (<1Y)", "₹2,100,000 (+15%)", "6"]
+        ],
+        latency: "6.8ms"
+      },
+      {
+        code: `<span class="c-comm">-- Query 3: WealthTech Mutual Fund Sharpe & Alpha Ranking</span>
+<span class="c-kw">SELECT</span> 
+  fund_name, category, aum_crores,
+  cagr_3yr_pct,
+  sharpe_ratio_rf_6_5,
+  alpha_vs_nifty50
+<span class="c-kw">FROM</span> dim_funds
+<span class="c-kw">WHERE</span> aum_crores &gt;= <span class="c-num">500</span>
+<span class="c-kw">ORDER BY</span> sharpe_ratio_rf_6_5 <span class="c-kw">DESC</span>
+<span class="c-kw">LIMIT</span> <span class="c-num">5</span>;`,
+        headers: ["fund_name", "category", "aum_crores", "cagr_3yr_pct", "sharpe_ratio", "alpha_vs_nifty"],
+        rows: [
+          ["Parag Parikh Flexi Cap", "Flexi Cap", "₹48,200 Cr", "+21.4%", "1.42", "+4.8%"],
+          ["HDFC Mid-Cap Opportunities", "Mid Cap", "₹62,100 Cr", "+24.8%", "1.38", "+6.2%"],
+          ["Nippon India Small Cap", "Small Cap", "₹51,400 Cr", "+28.2%", "1.26", "+7.5%"],
+          ["Mirae Asset Large Cap", "Large Cap", "₹38,900 Cr", "+16.8%", "1.18", "+1.4%"],
+          ["SBI Bluechip Fund", "Large Cap", "₹42,300 Cr", "+15.9%", "1.09", "+0.8%"]
+        ],
+        latency: "4.2ms"
+      }
+    ];
+
+    let currentPgIdx = 0;
+
+    function loadPlayground(idx) {
+      currentPgIdx = idx;
+      for (let i = 0; i < 3; i++) {
+        const btn = document.getElementById('pgb' + i);
+        if (btn) btn.classList.toggle('active', i === idx);
+      }
+      renderPlaygroundContent(idx);
+    }
+
+    function renderPlaygroundContent(idx) {
+      const q = playgroundQueries[idx];
+      document.getElementById('pgCodeWindow').innerHTML = q.code;
+      document.getElementById('pgLatency').textContent = q.latency;
+      document.getElementById('pgStatus').textContent = "READY // 0 ERRORS";
+
+      let tableHtml = '<table class="pg-table"><thead><tr>';
+      q.headers.forEach(h => { tableHtml += `<th>${h}</th>`; });
+      tableHtml += '</tr></thead><tbody>';
+      q.rows.forEach(r => {
+        tableHtml += '<tr>';
+        r.forEach(cell => { tableHtml += `<td>${cell}</td>`; });
+        tableHtml += '</tr>';
+      });
+      tableHtml += '</tbody></table>';
+
+      document.getElementById('pgOutputWindow').innerHTML = tableHtml;
+    }
+
+    function executeCurrentQuery() {
+      const statusEl = document.getElementById('pgStatus');
+      const latencyEl = document.getElementById('pgLatency');
+      statusEl.textContent = "EXECUTING QUERY...";
+      statusEl.style.color = "#fd9d7b";
+
+      setTimeout(() => {
+        statusEl.textContent = "SUCCESS // 200 OK";
+        statusEl.style.color = "#96ff6f";
+        const randomLat = (Math.random() * 3 + 3).toFixed(1) + "ms";
+        latencyEl.textContent = randomLat;
+        renderPlaygroundContent(currentPgIdx);
+      }, 250);
+    }
+    loadPlayground(0);
+
+    // --- Deep Dive Accordion Toggle ---
+    function toggleDeepDive(drawerId, btn) {
+      const drawer = document.getElementById(drawerId);
+      if (!drawer) return;
+      const isOpen = drawer.classList.contains('open');
+      const textSpan = btn.querySelector('.dd-text');
+      const arrowSpan = btn.querySelector('.icon-arrow');
+      if (isOpen) {
+        drawer.classList.remove('open');
+        btn.classList.remove('active');
+        if (arrowSpan) arrowSpan.textContent = '▼';
+        if (textSpan) textSpan.textContent = 'EXPAND DEEP DIVE';
+      } else {
+        drawer.classList.add('open');
+        btn.classList.add('active');
+        if (arrowSpan) arrowSpan.textContent = '▲';
+        if (textSpan) textSpan.textContent = 'COLLAPSE DEEP DIVE';
+      }
+    }
+
+    // --- Copy Email to Clipboard ---
+    function copyEmail() {
+      const email = 'pandeylokesh87@gmail.com';
+      navigator.clipboard.writeText(email).then(() => {
+        const notice = document.getElementById('copyNotice');
+        if (notice) {
+          notice.style.display = 'inline';
+          setTimeout(() => { notice.style.display = 'none'; }, 2400);
+        }
+        const copyBtn = document.getElementById('copyEmailBtnText');
+        if (copyBtn) {
+          copyBtn.textContent = 'COPIED!';
+          setTimeout(() => { copyBtn.textContent = 'COPY EMAIL'; }, 2000);
+        }
+      }).catch(err => {
+        window.location.href = 'mailto:' + email;
+      });
+    }
+
+    // --- Active Navbar Scroll Spy ---
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('sanityHeader');
+      if (window.scrollY > 20) {
+        header.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+        header.style.backgroundColor = 'rgba(11, 11, 11, 0.96)';
+      } else {
+        header.style.borderColor = 'var(--border-hairline)';
+        header.style.backgroundColor = 'rgba(11, 11, 11, 0.88)';
+      }
+
+      const sections = ['home', 'experience', 'projects', 'capabilities', 'playground', 'contact'];
+      let currentSec = 'home';
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 120) {
+          currentSec = id;
+        }
+      });
+
+      document.querySelectorAll('.nav-link').forEach(link => {
+        const href = link.getAttribute('href').replace('#', '');
+        link.classList.toggle('active', href === currentSec);
+      });
+    });
+  </script>
+</body>
+</html>
