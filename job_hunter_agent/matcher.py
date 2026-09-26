@@ -15,39 +15,54 @@ def analyze_job(title: str, description: str) -> Dict:
     text = (title + " " + description).lower()
     
     matched_skills = []
-    missing_skills = []
-    total_weight = sum(SKILL_WEIGHTS.values())
-    earned_weight = 0
     
-    for skill, weight in SKILL_WEIGHTS.items():
+    # Realistic skill weights
+    skill_values = {
+        "sql": 20,
+        "postgresql": 10,
+        "mysql": 10,
+        "python": 15,
+        "pandas": 10,
+        "power bi": 15,
+        "powerbi": 15,
+        "dax": 10,
+        "excel": 10,
+        "tableau": 10,
+        "data analysis": 15,
+        "analytics": 10,
+        "database": 10,
+        "reporting": 10,
+        "dashboard": 10,
+        "sap": 8,
+        "machine learning": 10,
+        "statistics": 8
+    }
+    
+    score = 0.0
+    
+    # Check title alignment (baseline 35%)
+    target_terms = ["data analyst", "sql developer", "business intelligence", "power bi", "analytics", "analyst", "database"]
+    if any(t in title.lower() for t in target_terms):
+        score += 35.0
+        
+    for skill, val in skill_values.items():
         pattern = r'\b' + re.escape(skill) + r'\b'
         if re.search(pattern, text):
-            matched_skills.append(skill.title())
-            earned_weight += weight
-            
-    # Calculate score normalized to 100%
-    if matched_skills:
-        raw_pct = (earned_weight / total_weight) * 100
-        # If core skills (SQL + Python + Power BI) are present, boost score
-        core_count = sum(1 for s in ["sql", "python", "power bi"] if re.search(r'\b' + s + r'\b', text))
-        boost = core_count * 10
-        score = min(100.0, round(raw_pct * 1.5 + boost, 1))
-    else:
-        score = 25.0  # Baseline for matching title
-        
-    # Check title alignment
-    title_match = any(t.lower() in title.lower() for t in JOB_SEARCH_CRITERIA["target_titles"])
-    if title_match:
-        score = min(100.0, score + 15)
-
-    is_qualified = score >= JOB_SEARCH_CRITERIA["min_match_score"]
+            display_name = "Power BI" if skill == "powerbi" else skill.title()
+            if display_name not in matched_skills:
+                matched_skills.append(display_name)
+                score += val
+                
+    # Normalize score
+    final_score = min(98.0, round(score, 1)) if score > 0 else 25.0
+    is_qualified = final_score >= 50.0
     
     # Generate tailored pitch
     tailored_pitch = generate_tailored_pitch(title, matched_skills)
 
     return {
         "title": title,
-        "match_score": score,
+        "match_score": final_score,
         "is_qualified": is_qualified,
         "matched_skills": matched_skills,
         "matched_skills_str": ", ".join(matched_skills[:8]),

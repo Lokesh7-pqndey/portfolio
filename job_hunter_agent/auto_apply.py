@@ -3,13 +3,17 @@ Auto-Apply Execution Engine.
 Automates matching, qualification, application payload generation,
 and recording applied jobs to the database.
 """
+import sys
 import time
 from typing import Dict, List
 from config import CANDIDATE_PROFILE, JOB_SEARCH_CRITERIA
 from database import is_job_applied, log_application
 from matcher import analyze_job
 
-def process_and_apply_jobs(discovered_jobs: List[Dict], max_applications: int = 15) -> List[Dict]:
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
+def process_and_apply_jobs(discovered_jobs: List[Dict], max_applications: int = 40) -> List[Dict]:
     """
     Evaluates discovered jobs, filters out duplicates, applies to qualified jobs,
     and logs successful applications.
@@ -43,25 +47,13 @@ def process_and_apply_jobs(discovered_jobs: List[Dict], max_applications: int = 
         # 3. Check qualification threshold
         if not analysis["is_qualified"]:
             skipped_count += 1
-            # Log as skipped so we don't re-scan unnecessarily
-            log_application(
-                job_id=job_id,
-                title=title,
-                company=company,
-                location=location,
-                platform=platform,
-                job_url=url,
-                match_score=match_score,
-                matched_skills=matched_skills,
-                missing_skills="",
-                status="SKIPPED",
-                notes=f"Below match threshold ({match_score}% < {JOB_SEARCH_CRITERIA['min_match_score']}%)"
-            )
             continue
             
+        reqs = job.get("requirements", "")
+
         # 4. Auto-Apply execution & logging
-        print(f"  [+] QUALIFIED ({match_score}%): {title} @ {company} ({location})")
-        print(f"      Matched Skills: {matched_skills}")
+        print(f"  [+] QUALIFIED ({match_score}%): [{platform}] {title} @ {company} ({location})")
+        print(f"      Requirements: {reqs}")
         
         success = log_application(
             job_id=job_id,
@@ -74,7 +66,8 @@ def process_and_apply_jobs(discovered_jobs: List[Dict], max_applications: int = 
             matched_skills=matched_skills,
             missing_skills="",
             status="APPLIED",
-            notes=f"Auto-applied with tailored pitch and resume.pdf attached. Match score: {match_score}%"
+            notes=f"Auto-applied with tailored pitch and resume.pdf attached. Match score: {match_score}%",
+            requirements=reqs
         )
         
         if success:
@@ -87,6 +80,7 @@ def process_and_apply_jobs(discovered_jobs: List[Dict], max_applications: int = 
                 "url": url,
                 "match_score": match_score,
                 "matched_skills": matched_skills,
+                "requirements": reqs,
                 "tailored_pitch": tailored_pitch
             })
             

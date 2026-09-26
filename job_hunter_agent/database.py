@@ -28,19 +28,25 @@ def init_db():
         match_score REAL,
         matched_skills TEXT,
         missing_skills TEXT,
+        requirements TEXT,
         applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         status TEXT DEFAULT 'APPLIED',
         application_notes TEXT
     )
     """)
+    # Migration check for existing database
+    try:
+        cursor.execute("ALTER TABLE applied_jobs ADD COLUMN requirements TEXT")
+    except sqlite3.OperationalError:
+        pass
     conn.commit()
     conn.close()
 
 def is_job_applied(job_id: str) -> bool:
-    """Checks whether this job has already been processed or applied to."""
+    """Checks whether this job has already been successfully applied to."""
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT id FROM applied_jobs WHERE job_id = ?", (job_id,))
+    cursor.execute("SELECT id FROM applied_jobs WHERE job_id = ? AND status = 'APPLIED'", (job_id,))
     row = cursor.fetchone()
     conn.close()
     return row is not None
@@ -56,7 +62,8 @@ def log_application(
     matched_skills: str,
     missing_skills: str,
     status: str = "APPLIED",
-    notes: str = ""
+    notes: str = "",
+    requirements: str = ""
 ) -> bool:
     """Logs a newly applied job into the database."""
     conn = get_connection()
@@ -65,11 +72,11 @@ def log_application(
         cursor.execute("""
         INSERT INTO applied_jobs (
             job_id, title, company, location, platform, job_url, 
-            match_score, matched_skills, missing_skills, applied_at, status, application_notes
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            match_score, matched_skills, missing_skills, requirements, applied_at, status, application_notes
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             job_id, title, company, location, platform, job_url,
-            match_score, matched_skills, missing_skills,
+            match_score, matched_skills, missing_skills, requirements,
             datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             status, notes
         ))

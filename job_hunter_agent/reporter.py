@@ -34,29 +34,42 @@ def generate_daily_report() -> str:
         f"- **Jobs Applied Today:** `{len(today_jobs)}`",
         f"- **Total Career Applications (All-Time):** `{stats['total_applied']}`",
         f"- **Average Match Quality:** `{stats['average_match_score']}%`",
+        f""
+    ]
+    
+    # Platform breakdown
+    platform_counts = {}
+    for j in today_jobs:
+        p = j.get("platform", "LinkedIn")
+        platform_counts[p] = platform_counts.get(p, 0) + 1
+    plat_str = " • ".join([f"**{p}:** `{cnt}`" for p, cnt in platform_counts.items()]) if platform_counts else "None"
+
+    report_lines.extend([
+        f"- **Platform Breakdown:** {plat_str}",
         f"",
         f"---",
         f"",
-        f"### 📋 Jobs Applied Today ({today_str})"
-    ]
+        f"### 📋 Multi-Platform Jobs Applied Today ({today_str})"
+    ])
     
     if not today_jobs:
         report_lines.append("\n*No new jobs applied today. Run `python main.py run` to scan and apply to active openings.*")
     else:
         report_lines.append("")
-        report_lines.append("| # | Company | Job Title | Location | Match | Key Matched Skills | Direct Link |")
-        report_lines.append("|---|---------|-----------|----------|:-----:|--------------------|:-----------:|")
+        report_lines.append("| # | Platform | Company | Job Title | Location | Match | Key Job Requirements | Direct Link |")
+        report_lines.append("|---|----------|---------|-----------|----------|:-----:|----------------------|:-----------:|")
         
         for idx, job in enumerate(today_jobs, 1):
             title = job["title"]
             company = job["company"]
+            platform = job.get("platform", "LinkedIn")
             loc = job["location"] or "India / Remote"
             score = f"{job['match_score']:.0f}%"
-            skills = job["matched_skills"] or "SQL, Python, Power BI"
+            reqs = job.get("requirements") or job.get("matched_skills") or "SQL, Python, Power BI, Advanced Excel"
             url = job["job_url"]
             link_md = f"[Open Job ↗]({url})" if url else "N/A"
             
-            report_lines.append(f"| {idx} | **{company}** | {title} | {loc} | `{score}` | {skills} | {link_md} |")
+            report_lines.append(f"| {idx} | **{platform}** | **{company}** | {title} | {loc} | `{score}` | {reqs} | {link_md} |")
             
     report_lines.extend([
         f"",

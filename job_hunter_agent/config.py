@@ -86,7 +86,7 @@ JOB_SEARCH_CRITERIA = {
         "Pune",
         "Dehradun"
     ],
-    "min_match_score": 65,  # Only apply if match >= 65%
+    "min_match_score": 55,  # Qualified threshold (55%+)
     "auto_apply_limit_per_day": 20,  # Safety cap per day
 }
 

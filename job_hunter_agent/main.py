@@ -35,7 +35,7 @@ def run_job_hunt():
     jobs = discover_all_jobs()
     
     # 2. Process, match, and apply
-    process_and_apply_jobs(jobs, max_applications=15)
+    process_and_apply_jobs(jobs, max_applications=40)
     
     # 3. Generate and display daily report
     print_daily_summary()
