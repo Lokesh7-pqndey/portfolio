@@ -1579,6 +1579,8 @@
       color: #e0e0e0;
       overflow-x: auto;
       min-height: 230px;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .pg-output-window {
@@ -1895,21 +1897,25 @@
               <div>
                 <div class="sidebar-block-title">Active Schemas</div>
                 <ul class="schema-tree">
-                  <li class="schema-item active" onclick="loadHeroTab(0)">
-                    <span>swiggy_analytics.sql</span>
-                    <span class="schema-badge">148K</span>
+                  <li class="schema-item active" id="sitem0" onclick="loadHeroTab(0)">
+                    <span>netflix_strategy.py</span>
+                    <span class="schema-badge">6.2K</span>
                   </li>
-                  <li class="schema-item" onclick="loadHeroTab(1)">
+                  <li class="schema-item" id="sitem1" onclick="loadHeroTab(1)">
+                    <span>swiggy_analytics.sql</span>
+                    <span class="schema-badge">150K</span>
+                  </li>
+                  <li class="schema-item" id="sitem2" onclick="loadHeroTab(2)">
                     <span>mutual_fund_alpha.dax</span>
                     <span class="schema-badge">50+</span>
                   </li>
-                  <li class="schema-item" onclick="loadHeroTab(2)">
+                  <li class="schema-item" id="sitem3" onclick="loadHeroTab(3)">
                     <span>fintech_hr_comp.sql</span>
                     <span class="schema-badge">5K</span>
                   </li>
-                  <li class="schema-item" onclick="loadHeroTab(3)">
-                    <span>retail_forecast.py</span>
-                    <span class="schema-badge">50K</span>
+                  <li class="schema-item" id="sitem4" onclick="loadHeroTab(4)">
+                    <span>rfm_clustering.py</span>
+                    <span class="schema-badge">4K</span>
                   </li>
                 </ul>
               </div>
@@ -2911,9 +2917,10 @@ stockout_risk = sku_metrics[sku_metrics[<span class="c-str">'days_of_supply'</sp
         <div class="playground-card">
           <div class="pg-toolbar">
             <div class="pg-query-selector">
-              <button class="pg-btn active" id="pgb0" onclick="loadPlayground(0)">Q1: Swiggy Dinner Rush Surge</button>
-              <button class="pg-btn" id="pgb1" onclick="loadPlayground(1)">Q2: Fintech Salary Inversion</button>
-              <button class="pg-btn" id="pgb2" onclick="loadPlayground(2)">Q3: Mutual Fund Sharpe &amp; Alpha</button>
+              <button class="pg-btn active" id="pgb0" onclick="loadPlayground(0)">Q1: Netflix Catalog Mix</button>
+              <button class="pg-btn" id="pgb1" onclick="loadPlayground(1)">Q2: Swiggy Dinner Rush Surge</button>
+              <button class="pg-btn" id="pgb2" onclick="loadPlayground(2)">Q3: Fintech Salary Inversion</button>
+              <button class="pg-btn" id="pgb3" onclick="loadPlayground(3)">Q4: Mutual Fund Sharpe &amp; Alpha</button>
             </div>
             <div>
               <button class="btn btn-sm pg-run-btn" onclick="executeCurrentQuery()">
@@ -3154,6 +3161,8 @@ risk_summary = df.groupby(<span class="c-str">'category'</span>).agg(
       for (let i = 0; i < 5; i++) {
         const tab = document.getElementById('htab' + i);
         if (tab) tab.classList.toggle('active', i === idx);
+        const sitem = document.getElementById('sitem' + i);
+        if (sitem) sitem.classList.toggle('active', i === idx);
       }
       const codePane = document.getElementById('heroCodePane');
       const outputStat = document.getElementById('heroOutputStat');
@@ -3167,7 +3176,26 @@ risk_summary = df.groupby(<span class="c-str">'category'</span>).agg(
     // --- Interactive SQL Playground Console ---
     const playgroundQueries = [
       {
-        code: `<span class="c-comm">-- Query 1: Swiggy Dinner Rush Hourly Demand Bottleneck</span>
+        code: `<span class="c-comm">-- Query 1: Netflix Global Catalog Mix &amp; Mature Demographics</span>
+<span class="c-kw">SELECT</span> 
+  type,
+  <span class="c-fn">COUNT</span>(show_id) <span class="c-kw">AS</span> total_titles,
+  <span class="c-fn">ROUND</span>(<span class="c-fn">COUNT</span>(show_id) * <span class="c-num">100.0</span> / <span class="c-fn">SUM</span>(<span class="c-fn">COUNT</span>(show_id)) <span class="c-kw">OVER</span>(), <span class="c-num">1</span>) <span class="c-kw">AS</span> pct_share,
+  <span class="c-fn">COUNT</span>(<span class="c-kw">CASE WHEN</span> rating = <span class="c-str">'TV-MA'</span> <span class="c-kw">THEN</span> <span class="c-num">1</span> <span class="c-kw">END</span>) <span class="c-kw">AS</span> tv_ma_titles,
+  <span class="c-fn">ROUND</span>(<span class="c-fn">COUNT</span>(<span class="c-kw">CASE WHEN</span> rating = <span class="c-str">'TV-MA'</span> <span class="c-kw">THEN</span> <span class="c-num">1</span> <span class="c-kw">END</span>) * <span class="c-num">100.0</span> / <span class="c-fn">COUNT</span>(show_id), <span class="c-num">1</span>) <span class="c-kw">AS</span> tv_ma_pct
+<span class="c-kw">FROM</span> netflix_titles
+<span class="c-kw">GROUP BY</span> type
+<span class="c-kw">ORDER BY</span> total_titles <span class="c-kw">DESC</span>;`,
+        headers: ["type", "total_titles", "pct_share", "tv_ma_titles", "tv_ma_pct"],
+        rows: [
+          ["Movie", "4,216", "68.0%", "1,392", "33.0%"],
+          ["TV Show", "1,984", "32.0%", "654", "33.0%"],
+          ["TOTAL CATALOG", "6,200", "100.0%", "2,046", "33.0%"]
+        ],
+        latency: "3.8ms"
+      },
+      {
+        code: `<span class="c-comm">-- Query 2: Swiggy Dinner Rush Hourly Demand Bottleneck</span>
 <span class="c-kw">SELECT</span> 
   <span class="c-fn">EXTRACT</span>(HOUR <span class="c-kw">FROM</span> order_time) <span class="c-kw">AS</span> hour_of_day,
   <span class="c-fn">COUNT</span>(order_id) <span class="c-kw">AS</span> volume,
@@ -3189,7 +3217,7 @@ risk_summary = df.groupby(<span class="c-str">'category'</span>).agg(
         latency: "5.4ms"
       },
       {
-        code: `<span class="c-comm">-- Query 2: Fintech HR Comp Inversion Detection CTE</span>
+        code: `<span class="c-comm">-- Query 3: Fintech HR Comp Inversion Detection CTE</span>
 <span class="c-kw">WITH</span> Tenure_Groups <span class="c-kw">AS</span> (
   <span class="c-kw">SELECT</span> 
     emp_id, department, title, salary,
@@ -3218,7 +3246,7 @@ risk_summary = df.groupby(<span class="c-str">'category'</span>).agg(
         latency: "6.8ms"
       },
       {
-        code: `<span class="c-comm">-- Query 3: WealthTech Mutual Fund Sharpe & Alpha Ranking</span>
+        code: `<span class="c-comm">-- Query 4: WealthTech Mutual Fund Sharpe &amp; Alpha Ranking</span>
 <span class="c-kw">SELECT</span> 
   fund_name, category, aum_crores,
   cagr_3yr_pct,
@@ -3244,7 +3272,7 @@ risk_summary = df.groupby(<span class="c-str">'category'</span>).agg(
 
     function loadPlayground(idx) {
       currentPgIdx = idx;
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 4; i++) {
         const btn = document.getElementById('pgb' + i);
         if (btn) btn.classList.toggle('active', i === idx);
       }
