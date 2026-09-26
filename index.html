@@ -1857,7 +1857,7 @@
 
           <div class="hero-actions-row">
             <a href="#projects" class="btn btn-accent">
-              <span>EXPLORE SYSTEMS (05)</span>
+              <span>EXPLORE SYSTEMS (06)</span>
               <span>↓</span>
             </a>
             <a href="https://github.com/Lokesh7-pqndey?tab=repositories" target="_blank" class="btn btn-outline">
@@ -1927,10 +1927,11 @@
             <!-- Central Live Query / Code Execution Area -->
             <div class="mockup-main">
               <div class="query-tabs">
-                <div class="q-tab active" id="htab0" onclick="loadHeroTab(0)">swiggy_pareto_gmv.sql</div>
-                <div class="q-tab" id="htab1" onclick="loadHeroTab(1)">mutual_fund_sharpe.dax</div>
-                <div class="q-tab" id="htab2" onclick="loadHeroTab(2)">fintech_salary_lag.sql</div>
-                <div class="q-tab" id="htab3" onclick="loadHeroTab(3)">rfm_clustering.py</div>
+                <div class="q-tab active" id="htab0" onclick="loadHeroTab(0)">netflix_strategy.py</div>
+                <div class="q-tab" id="htab1" onclick="loadHeroTab(1)">swiggy_pareto_gmv.sql</div>
+                <div class="q-tab" id="htab2" onclick="loadHeroTab(2)">mutual_fund_sharpe.dax</div>
+                <div class="q-tab" id="htab3" onclick="loadHeroTab(3)">fintech_salary_lag.sql</div>
+                <div class="q-tab" id="htab4" onclick="loadHeroTab(4)">rfm_clustering.py</div>
               </div>
 
               <div class="code-console-pane" id="heroCodePane">
@@ -2176,17 +2177,125 @@
             ENGINEERED DATA SYSTEMS.
           </h2>
           <p class="section-lead-p">
-            Five production-grade analytics pipelines, machine learning models, and executive BI architectures
-            built on verifiable datasets. Every project includes public repositories and reproducible logic.
+            Six production-grade analytics pipelines, machine learning models, and executive BI architectures
+            built on verifiable datasets. Headlined by Netflix content strategy intelligence and Swiggy customer churn prediction directly from my professional resume.
           </p>
         </div>
 
         <div class="projects-list">
 
-          <!-- PROJECT 01: SWIGGY -->
+          <!-- PROJECT 01: NETFLIX CONTENT STRATEGY (RESUME FEATURED) -->
           <div class="project-card">
             <div class="project-header-bar">
-              <span class="project-index">[ SYSTEM 01 / 05 ] &bull; CONSUMER ANALYTICS &amp; CHURN ML</span>
+              <span class="project-index">[ SYSTEM 01 / 06 ] &bull; STREAMING STRATEGY &amp; CATALOG EDA</span>
+              <div class="project-chips">
+                <span class="tech-pill">Python</span>
+                <span class="tech-pill">Pandas</span>
+                <span class="tech-pill">Exploratory Data Analysis</span>
+                <span class="tech-pill">Seaborn / Matplotlib</span>
+                <span class="tech-pill">Content Strategy</span>
+              </div>
+            </div>
+
+            <div class="project-main-grid">
+              <div class="project-info-side">
+                <h3 class="project-title">Netflix Content Strategy &amp; Catalog Intelligence</h3>
+                <p class="project-desc">
+                  Investigated global streaming content strategy across Netflix's 6,200+ title catalog (2008–2021) to quantify
+                  programming mix, release cycles, and geographic sourcing priorities. Resolved 2,445 missing metadata records
+                  (1,969 directors, 476 countries), parsed international date structures, and delivered cross-tabulated insights
+                  on ratings, genre saturation, and production hubs.
+                </p>
+
+                <div class="project-metrics-row">
+                  <div class="p-metric">
+                    <div class="p-metric-val">6,200+</div>
+                    <div class="p-metric-lbl">Titles Cataloged &amp; Cleaned</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">68% : 32%</div>
+                    <div class="p-metric-lbl">Movies vs TV Shows Mix</div>
+                  </div>
+                  <div class="p-metric">
+                    <div class="p-metric-val">33%</div>
+                    <div class="p-metric-lbl">TV-MA Dominant Rating</div>
+                  </div>
+                </div>
+
+                <div class="project-actions">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive1', this)">
+                    <span class="dd-icon">⚡</span>
+                    <span class="dd-text">EXPAND DEEP DIVE</span>
+                    <span class="icon-arrow">▼</span>
+                  </button>
+                  <a href="https://github.com/Lokesh7-pqndey/netflix-content-strategy-analysis" target="_blank" class="btn btn-outline btn-sm">
+                    <span>VIEW REPOSITORY</span>
+                    <span>↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="project-preview-panel">
+                <div class="preview-header">
+                  <span>netflix_eda.py // CATALOG SOURCING PIPELINE</span>
+                  <span class="mono-accent">EXEC: 0.018s</span>
+                </div>
+                <div class="preview-code-body">
+<span class="c-comm"># Netflix Catalog Sourcing &amp; Content Mix</span>
+<span class="c-kw">import</span> pandas <span class="c-kw">as</span> pd
+<span class="c-kw">import</span> seaborn <span class="c-kw">as</span> sns
+
+df[<span class="c-str">'date_added'</span>] = pd.to_datetime(df[<span class="c-str">'date_added'</span>].str.strip())
+df[<span class="c-str">'release_year'</span>] = pd.to_numeric(df[<span class="c-str">'release_year'</span>])
+
+<span class="c-comm"># Content Mix: 68% Movies vs 32% TV Series</span>
+mix = df[<span class="c-str">'type'</span>].value_counts(normalize=<span class="c-kw">True</span>) * <span class="c-num">100</span>
+top_hubs = df[<span class="c-str">'country'</span>].str.split(<span class="c-str">', '</span>).explode().value_counts().head(<span class="c-num">3</span>)
+
+<span class="c-kw">print</span>(f<span class="c-str">"Top Production Hubs: {list(top_hubs.index)}"</span>)
+<span class="c-comm"># -&gt; ['United States', 'India', 'United Kingdom']</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Deep Dive Drawer -->
+            <div class="deep-dive-drawer" id="deepDive1">
+              <div class="drawer-grid">
+                <div class="drawer-card">
+                  <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
+                  <p class="drawer-card-p">
+                    Streaming platforms operate in an intensely competitive attention economy with multi-billion-dollar licensing and production budgets. Understanding catalog distribution across formats (movies vs. TV series), target demographics (ratings), and geographic production clusters is essential for optimizing procurement budgets, avoiding library saturation, and tailoring local content acquisition.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">02 // Technical Execution (WHAT)</div>
+                  <p class="drawer-card-p">
+                    Conducted rigorous exploratory data analysis (EDA) and data cleansing across 6,200+ Netflix records spanning 2008–2021 using Python, Pandas, and NumPy. Engineered cleaning pipelines resolving 2,445 missing metadata fields (1,969 missing directors, 476 missing countries) and standardized messy date-added strings into temporal features. Designed cross-tabulations and distributions utilizing Matplotlib and Seaborn.
+                  </p>
+                </div>
+                <div class="drawer-card">
+                  <div class="drawer-card-title">03 // Quantified Findings</div>
+                  <p class="drawer-card-p">
+                    &bull; <strong>Content Breakdown:</strong> Movies dominate the catalog at 68% (4,200+ titles) versus 32% for TV shows, reflecting rapid licensed film acquisitions.<br>
+                    &bull; <strong>Mature Audience Dominance:</strong> TV-MA represents 33% of catalog programming, establishing adult-targeted content as Netflix's core subscriber hook.<br>
+                    &bull; <strong>Top Production Epicenters:</strong> United States, India, and United Kingdom represent the top 3 global content-producing markets with persistent repeat director-cast partnerships.
+                  </p>
+                </div>
+              </div>
+
+              <div class="interview-pitch-box">
+                <div class="interview-pitch-title">Executive 60-Second Interview Elevator Pitch</div>
+                <p class="interview-pitch-text">
+                  "In my Netflix Content Strategy project, I analyzed 6,200+ titles spanning 2008 to 2021 to decipher streaming procurement strategy. After cleaning over 2,400 missing metadata values across directors and countries and standardizing temporal records, I quantified that Netflix maintains a 68% movie to 32% TV show mix, with TV-MA comprising 33% of all content. I identified the US, India, and UK as top producing hubs, delivering actionable catalog balance insights for content programming teams."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROJECT 02: SWIGGY (RESUME FEATURED) -->
+          <div class="project-card">
+            <div class="project-header-bar">
+              <span class="project-index">[ SYSTEM 02 / 06 ] &bull; CONSUMER ANALYTICS &amp; CHURN ML</span>
               <div class="project-chips">
                 <span class="tech-pill">SQL Pipeline</span>
                 <span class="tech-pill">Python</span>
@@ -2221,7 +2330,7 @@
                 </div>
 
                 <div class="project-actions">
-                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive1', this)">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive2', this)">
                     <span class="dd-icon">⚡</span>
                     <span class="dd-text">EXPAND DEEP DIVE</span>
                     <span class="icon-arrow">▼</span>
@@ -2255,7 +2364,7 @@ pareto_point = (cum_rev_share &lt;= <span class="c-num">0.732</span>).mean()
             </div>
 
             <!-- Deep Dive Drawer -->
-            <div class="deep-dive-drawer" id="deepDive1">
+            <div class="deep-dive-drawer" id="deepDive2">
               <div class="drawer-grid">
                 <div class="drawer-card">
                   <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
@@ -2288,10 +2397,10 @@ pareto_point = (cum_rev_share &lt;= <span class="c-num">0.732</span>).mean()
             </div>
           </div>
 
-          <!-- PROJECT 02: MUTUAL FUND BI -->
+          <!-- PROJECT 03: MUTUAL FUND BI -->
           <div class="project-card">
             <div class="project-header-bar">
-              <span class="project-index">[ SYSTEM 02 / 05 ] &bull; WEALTHTECH BI</span>
+              <span class="project-index">[ SYSTEM 03 / 06 ] &bull; WEALTHTECH BI</span>
               <div class="project-chips">
                 <span class="tech-pill">Power BI</span>
                 <span class="tech-pill">DAX Modeling</span>
@@ -2324,7 +2433,7 @@ pareto_point = (cum_rev_share &lt;= <span class="c-num">0.732</span>).mean()
                 </div>
 
                 <div class="project-actions">
-                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive2', this)">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive3', this)">
                     <span class="dd-icon">⚡</span>
                     <span class="dd-text">EXPAND DEEP DIVE</span>
                     <span class="icon-arrow">▼</span>
@@ -2360,7 +2469,7 @@ Max_Drawdown =
             </div>
 
             <!-- Deep Dive Drawer -->
-            <div class="deep-dive-drawer" id="deepDive2">
+            <div class="deep-dive-drawer" id="deepDive3">
               <div class="drawer-grid">
                 <div class="drawer-card">
                   <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
@@ -2393,10 +2502,10 @@ Max_Drawdown =
             </div>
           </div>
 
-          <!-- PROJECT 03: FINTECH HR SQL -->
+          <!-- PROJECT 04: FINTECH HR SQL -->
           <div class="project-card">
             <div class="project-header-bar">
-              <span class="project-index">[ SYSTEM 03 / 05 ] &bull; POSTGRESQL ENGINE</span>
+              <span class="project-index">[ SYSTEM 04 / 06 ] &bull; POSTGRESQL ENGINE</span>
               <div class="project-chips">
                 <span class="tech-pill">PostgreSQL</span>
                 <span class="tech-pill">Window Functions</span>
@@ -2429,7 +2538,7 @@ Max_Drawdown =
                 </div>
 
                 <div class="project-actions">
-                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive3', this)">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive4', this)">
                     <span class="dd-icon">⚡</span>
                     <span class="dd-text">EXPAND DEEP DIVE</span>
                     <span class="icon-arrow">▼</span>
@@ -2461,7 +2570,7 @@ Max_Drawdown =
             </div>
 
             <!-- Deep Dive Drawer -->
-            <div class="deep-dive-drawer" id="deepDive3">
+            <div class="deep-dive-drawer" id="deepDive4">
               <div class="drawer-grid">
                 <div class="drawer-card">
                   <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
@@ -2493,10 +2602,10 @@ Max_Drawdown =
             </div>
           </div>
 
-          <!-- PROJECT 04: CUSTOMER SEGMENTATION -->
+          <!-- PROJECT 05: CUSTOMER SEGMENTATION -->
           <div class="project-card">
             <div class="project-header-bar">
-              <span class="project-index">[ SYSTEM 04 / 05 ] &bull; MACHINE LEARNING</span>
+              <span class="project-index">[ SYSTEM 05 / 06 ] &bull; MACHINE LEARNING</span>
               <div class="project-chips">
                 <span class="tech-pill">Python</span>
                 <span class="tech-pill">Scikit-learn</span>
@@ -2529,7 +2638,7 @@ Max_Drawdown =
                 </div>
 
                 <div class="project-actions">
-                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive4', this)">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive5', this)">
                     <span class="dd-icon">⚡</span>
                     <span class="dd-text">EXPAND DEEP DIVE</span>
                     <span class="icon-arrow">▼</span>
@@ -2562,7 +2671,7 @@ rfm[<span class="c-str">'Cluster'</span>] = kmeans.fit_predict(rfm_scaled)
             </div>
 
             <!-- Deep Dive Drawer -->
-            <div class="deep-dive-drawer" id="deepDive4">
+            <div class="deep-dive-drawer" id="deepDive5">
               <div class="drawer-grid">
                 <div class="drawer-card">
                   <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
@@ -2595,10 +2704,10 @@ rfm[<span class="c-str">'Cluster'</span>] = kmeans.fit_predict(rfm_scaled)
             </div>
           </div>
 
-          <!-- PROJECT 05: RETAIL ANALYTICS -->
+          <!-- PROJECT 06: RETAIL ANALYTICS -->
           <div class="project-card">
             <div class="project-header-bar">
-              <span class="project-index">[ SYSTEM 05 / 05 ] &bull; BUSINESS INTELLIGENCE</span>
+              <span class="project-index">[ SYSTEM 06 / 06 ] &bull; BUSINESS INTELLIGENCE</span>
               <div class="project-chips">
                 <span class="tech-pill">Python</span>
                 <span class="tech-pill">Pandas</span>
@@ -2631,7 +2740,7 @@ rfm[<span class="c-str">'Cluster'</span>] = kmeans.fit_predict(rfm_scaled)
                 </div>
 
                 <div class="project-actions">
-                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive5', this)">
+                  <button class="deep-dive-trigger" onclick="toggleDeepDive('deepDive6', this)">
                     <span class="dd-icon">⚡</span>
                     <span class="dd-text">EXPAND DEEP DIVE</span>
                     <span class="icon-arrow">▼</span>
@@ -2662,7 +2771,7 @@ stockout_risk = sku_metrics[sku_metrics[<span class="c-str">'days_of_supply'</sp
             </div>
 
             <!-- Deep Dive Drawer -->
-            <div class="deep-dive-drawer" id="deepDive5">
+            <div class="deep-dive-drawer" id="deepDive6">
               <div class="drawer-grid">
                 <div class="drawer-card">
                   <div class="drawer-card-title">01 // The Business Problem (WHY)</div>
@@ -2706,7 +2815,7 @@ stockout_risk = sku_metrics[sku_metrics[<span class="c-str">'days_of_supply'</sp
       <div class="container">
         <div class="section-header-block">
           <div class="section-eyebrow">
-            <span>// 03 SYSTEM CAPABILITIES</span>
+            <span>// 04 SYSTEM CAPABILITIES</span>
           </div>
           <h2 class="display-section">
             SCHEMA &amp; STACK ARCHITECTURE.
@@ -2788,7 +2897,7 @@ stockout_risk = sku_metrics[sku_metrics[<span class="c-str">'days_of_supply'</sp
       <div class="container">
         <div class="section-header-block">
           <div class="section-eyebrow">
-            <span>// 04 INTERACTIVE QUERY CONSOLE</span>
+            <span>// 05 INTERACTIVE QUERY CONSOLE</span>
           </div>
           <h2 class="display-section">
             SIMULATE LIVE SQL QUERIES.
@@ -2840,7 +2949,7 @@ stockout_risk = sku_metrics[sku_metrics[<span class="c-str">'days_of_supply'</sp
         <div class="contact-box">
           <div class="contact-header">
             <div class="section-eyebrow">
-              <span>// 05 GET IN TOUCH</span>
+              <span>// 06 GET IN TOUCH</span>
             </div>
             <h2 class="display-section">
               LET'S BUILD SOMETHING DATA-DRIVEN.
@@ -2963,6 +3072,19 @@ stockout_risk = sku_metrics[sku_metrics[<span class="c-str">'days_of_supply'</sp
     // --- Hero Ghosted Studio Data ---
     const heroSnippets = [
       {
+        code: `<span class="c-comm"># Netflix Content Strategy: Catalog Mix & Geographic Sourcing</span>
+<span class="c-kw">import</span> pandas <span class="c-kw">as</span> pd
+
+df[<span class="c-str">'date_added'</span>] = pd.to_datetime(df[<span class="c-str">'date_added'</span>].str.strip())
+<span class="c-comm"># Content Mix: 68% Movies vs 32% TV Series</span>
+content_mix = df[<span class="c-str">'type'</span>].value_counts(normalize=<span class="c-kw">True</span>) * <span class="c-num">100</span>
+mature_share = (df[<span class="c-str">'rating'</span>] == <span class="c-str">'TV-MA'</span>).mean() * <span class="c-num">100</span>
+
+<span class="c-kw">print</span>(f<span class="c-str">"Movies: {content_mix['Movie']:.1f}% | TV Shows: {content_mix['TV Show']:.1f}%"</span>)
+<span class="c-kw">print</span>(f<span class="c-str">"TV-MA Dominance: {mature_share:.1f}% of global catalog"</span>)`,
+        stat: "6,200+ Titles Cataloged & 2,445 Missing Records Cleaned"
+      },
+      {
         code: `<span class="c-comm">-- Swiggy Orders Peak Bottleneck & Pareto GMV Share</span>
 <span class="c-kw">WITH</span> City_Orders <span class="c-kw">AS</span> (
   <span class="c-kw">SELECT</span> 
@@ -3029,7 +3151,7 @@ risk_summary = df.groupby(<span class="c-str">'category'</span>).agg(
     ];
 
     function loadHeroTab(idx) {
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 5; i++) {
         const tab = document.getElementById('htab' + i);
         if (tab) tab.classList.toggle('active', i === idx);
       }

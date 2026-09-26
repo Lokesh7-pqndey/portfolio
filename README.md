@@ -47,17 +47,22 @@
 
 ## 📊 Featured Systems & Deep Dives
 
-1. **Swiggy End-to-End Analytics & Churn Prediction (Python, SQL, Random Forest, Flask)**
-   - Modeled 150K+ orders & 100K users.
-   - 80% of INR 964M revenue driven by 11,419 restaurant partners.
-   - 0.91 ROC AUC Random Forest churn classifier deployed as a live Flask API.
-2. **Mutual Fund Analysis & Alpha Dashboard (Power BI, DAX, Star Schema)**
+1. **Netflix Content Strategy & Catalog Intelligence (Python, Pandas, EDA, Seaborn)**
+   - Investigated Netflix's 6,200+ title catalog (2008–2021) to quantify programming mix and geographic sourcing priorities.
+   - Cleaned 2,445 missing metadata fields (1,969 directors, 476 countries) and standardized temporal structures.
+   - Discovered catalog composition: 68% movies vs 32% TV series, with TV-MA as dominant rating (33%).
+   - Identified US, India, and UK as top producing hubs with persistent repeat director-cast partnerships.
+2. **Swiggy End-to-End Analytics & Churn Prediction (SQL, Python, Random Forest, Flask, Power BI)**
+   - Tackled 87.76% customer churn challenge across 150K+ orders and 100K users.
+   - Engineered 5-table relational SQL pipeline uncovering 11,419 restaurants driving 80% of INR 964M revenue.
+   - 0.91 ROC AUC Random Forest churn classifier deployed as a live scoring Flask API and 5-page Power BI dashboard.
+3. **Mutual Fund Analysis & Alpha Dashboard (Power BI, DAX, Star Schema)**
    - 50+ wealth schemes benchmarked vs NIFTY 50 with custom Sharpe ratio and drawdown DAX measures.
-3. **Fintech HR Analytics SQL System (PostgreSQL, CTEs, Window Functions)**
+4. **Fintech HR Analytics SQL System (PostgreSQL, CTEs, Window Functions)**
    - 5,000+ employee records; exposed an 18% compensation inversion between new senior hires and tenured staff.
-4. **Customer Segmentation via Machine Learning (Scikit-Learn, K-Means, RFM)**
+5. **Customer Segmentation via Machine Learning (Scikit-Learn, K-Means, RFM)**
    - Optimal K=4 clusters with 0.74 silhouette score distinguishing Champions, Loyalists, and Churn targets.
-5. **Retail Analytics & Sales Forecasting (Python, Pandas, Retail BI)**
+6. **Retail Analytics & Sales Forecasting (Python, Pandas, Retail BI)**
    - Evaluated ₹12.8M GMV across 50K+ SKUs; computed Days of Supply (DoS) and flagged ₹1.8M in dead capital.
 
 ---
