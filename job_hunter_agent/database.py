@@ -46,10 +46,10 @@ def init_db():
     conn.close()
 
 def is_job_applied(job_id: str) -> bool:
-    """Checks whether this job has already been successfully applied to."""
+    """Checks whether this job has already been successfully applied or processed."""
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT id FROM applied_jobs WHERE job_id = ? AND status = 'APPLIED'", (job_id,))
+    cursor.execute("SELECT id FROM applied_jobs WHERE job_id = ? AND status != 'SKIPPED'", (job_id,))
     row = cursor.fetchone()
     conn.close()
     return row is not None
@@ -101,7 +101,7 @@ def get_today_applied_jobs() -> List[Dict]:
     today_str = date.today().strftime("%Y-%m-%d")
     cursor.execute("""
         SELECT * FROM applied_jobs 
-        WHERE date(applied_at) = ? AND status = 'APPLIED'
+        WHERE date(applied_at) = ? AND status != 'SKIPPED'
         ORDER BY applied_at DESC
     """, (today_str,))
     rows = cursor.fetchall()
@@ -114,13 +114,13 @@ def get_overall_stats() -> Dict:
     cursor = conn.cursor()
     today_str = date.today().strftime("%Y-%m-%d")
     
-    cursor.execute("SELECT COUNT(*) FROM applied_jobs WHERE status = 'APPLIED'")
+    cursor.execute("SELECT COUNT(*) FROM applied_jobs WHERE status != 'SKIPPED'")
     total_applied = cursor.fetchone()[0]
     
-    cursor.execute("SELECT COUNT(*) FROM applied_jobs WHERE date(applied_at) = ? AND status = 'APPLIED'", (today_str,))
+    cursor.execute("SELECT COUNT(*) FROM applied_jobs WHERE date(applied_at) = ? AND status != 'SKIPPED'", (today_str,))
     today_applied = cursor.fetchone()[0]
     
-    cursor.execute("SELECT AVG(match_score) FROM applied_jobs WHERE status = 'APPLIED'")
+    cursor.execute("SELECT AVG(match_score) FROM applied_jobs WHERE status != 'SKIPPED'")
     avg_match = cursor.fetchone()[0] or 0.0
     
     conn.close()

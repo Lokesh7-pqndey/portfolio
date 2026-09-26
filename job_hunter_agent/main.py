@@ -67,6 +67,9 @@ def main():
         run_job_hunt()
     elif command == "report":
         print_daily_summary()
+    elif command == "login":
+        from live_submitter import launch_persistent_login_window
+        launch_persistent_login_window()
     elif command == "schedule":
         run_scheduled()
     elif command == "match":
@@ -76,7 +79,7 @@ def main():
         print(f"Qualified: {res['is_qualified']}")
         print(f"Matched Skills: {res['matched_skills_str']}\n")
     else:
-        print(f"Unknown command '{command}'. Available: run, report, schedule, match")
+        print(f"Unknown command '{command}'. Available: run, report, login, schedule, match")
 
 if __name__ == "__main__":
     main()

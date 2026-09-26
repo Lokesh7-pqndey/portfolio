@@ -10,6 +10,7 @@ from config import CANDIDATE_PROFILE, JOB_SEARCH_CRITERIA
 from database import is_job_applied, log_application
 from matcher import analyze_job
 from resume_generator import generate_tailored_resume, generate_tailored_cover_letter
+from live_submitter import attempt_live_submission
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -58,11 +59,19 @@ def process_and_apply_jobs(discovered_jobs: List[Dict], max_applications: int = 
         tailored_resume_path = res_info["resume_path"]
         cover_letter_path = letter_info["letter_path"]
 
-        # 5. Auto-Apply execution & logging
+        # 5. Auto-Apply execution & Live Submission
         print(f"  [+] QUALIFIED ({match_score}%): [{platform}] {title} @ {company} ({location})")
         print(f"      Requirements: {reqs}")
         print(f"      📄 Tailored Overleaf Resume: {tailored_resume_path}")
         print(f"      ✉️ Tailored Cover Letter:    {cover_letter_path}")
+        
+        # Real browser form fill & live submission attempt
+        live_result = attempt_live_submission(job)
+        live_status = live_result.get("status", "APPLIED")
+        live_notes = f"{live_result.get('message', '')} | Match: {match_score}%"
+        proof_path = live_result.get("proof_screenshot", "")
+        if proof_path:
+            live_notes += f" | Proof: {proof_path}"
         
         success = log_application(
             job_id=job_id,
@@ -74,8 +83,8 @@ def process_and_apply_jobs(discovered_jobs: List[Dict], max_applications: int = 
             match_score=match_score,
             matched_skills=matched_skills,
             missing_skills="",
-            status="APPLIED",
-            notes=f"Auto-applied with tailored Overleaf resume & cover letter. Match score: {match_score}%",
+            status=live_status,
+            notes=live_notes,
             requirements=reqs,
             tailored_resume_path=tailored_resume_path,
             cover_letter_path=cover_letter_path
