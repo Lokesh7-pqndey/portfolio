@@ -29,16 +29,19 @@ def init_db():
         matched_skills TEXT,
         missing_skills TEXT,
         requirements TEXT,
+        tailored_resume_path TEXT,
+        cover_letter_path TEXT,
         applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         status TEXT DEFAULT 'APPLIED',
         application_notes TEXT
     )
     """)
     # Migration check for existing database
-    try:
-        cursor.execute("ALTER TABLE applied_jobs ADD COLUMN requirements TEXT")
-    except sqlite3.OperationalError:
-        pass
+    for col in ["requirements", "tailored_resume_path", "cover_letter_path"]:
+        try:
+            cursor.execute(f"ALTER TABLE applied_jobs ADD COLUMN {col} TEXT")
+        except sqlite3.OperationalError:
+            pass
     conn.commit()
     conn.close()
 
@@ -63,20 +66,24 @@ def log_application(
     missing_skills: str,
     status: str = "APPLIED",
     notes: str = "",
-    requirements: str = ""
+    requirements: str = "",
+    tailored_resume_path: str = "",
+    cover_letter_path: str = ""
 ) -> bool:
-    """Logs a newly applied job into the database."""
+    """Logs a newly applied job into the database with tailored resume and cover letter paths."""
     conn = get_connection()
     cursor = conn.cursor()
     try:
         cursor.execute("""
         INSERT INTO applied_jobs (
             job_id, title, company, location, platform, job_url, 
-            match_score, matched_skills, missing_skills, requirements, applied_at, status, application_notes
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            match_score, matched_skills, missing_skills, requirements,
+            tailored_resume_path, cover_letter_path, applied_at, status, application_notes
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             job_id, title, company, location, platform, job_url,
             match_score, matched_skills, missing_skills, requirements,
+            tailored_resume_path, cover_letter_path,
             datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             status, notes
         ))

@@ -9,6 +9,7 @@ from typing import Dict, List
 from config import CANDIDATE_PROFILE, JOB_SEARCH_CRITERIA
 from database import is_job_applied, log_application
 from matcher import analyze_job
+from resume_generator import generate_tailored_resume, generate_tailored_cover_letter
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -51,9 +52,17 @@ def process_and_apply_jobs(discovered_jobs: List[Dict], max_applications: int = 
             
         reqs = job.get("requirements", "")
 
-        # 4. Auto-Apply execution & logging
+        # 4. Generate Dynamic Overleaf Tailored Resume & Matching Cover Letter
+        res_info = generate_tailored_resume(job)
+        letter_info = generate_tailored_cover_letter(job)
+        tailored_resume_path = res_info["resume_path"]
+        cover_letter_path = letter_info["letter_path"]
+
+        # 5. Auto-Apply execution & logging
         print(f"  [+] QUALIFIED ({match_score}%): [{platform}] {title} @ {company} ({location})")
         print(f"      Requirements: {reqs}")
+        print(f"      📄 Tailored Overleaf Resume: {tailored_resume_path}")
+        print(f"      ✉️ Tailored Cover Letter:    {cover_letter_path}")
         
         success = log_application(
             job_id=job_id,
@@ -66,8 +75,10 @@ def process_and_apply_jobs(discovered_jobs: List[Dict], max_applications: int = 
             matched_skills=matched_skills,
             missing_skills="",
             status="APPLIED",
-            notes=f"Auto-applied with tailored pitch and resume.pdf attached. Match score: {match_score}%",
-            requirements=reqs
+            notes=f"Auto-applied with tailored Overleaf resume & cover letter. Match score: {match_score}%",
+            requirements=reqs,
+            tailored_resume_path=tailored_resume_path,
+            cover_letter_path=cover_letter_path
         )
         
         if success:
@@ -81,7 +92,9 @@ def process_and_apply_jobs(discovered_jobs: List[Dict], max_applications: int = 
                 "match_score": match_score,
                 "matched_skills": matched_skills,
                 "requirements": reqs,
-                "tailored_pitch": tailored_pitch
+                "tailored_pitch": tailored_pitch,
+                "tailored_resume_path": tailored_resume_path,
+                "cover_letter_path": cover_letter_path
             })
             
         if len(applied_list) >= max_applications:

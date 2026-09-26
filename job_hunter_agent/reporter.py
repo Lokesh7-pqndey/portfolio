@@ -56,20 +56,34 @@ def generate_daily_report() -> str:
         report_lines.append("\n*No new jobs applied today. Run `python main.py run` to scan and apply to active openings.*")
     else:
         report_lines.append("")
-        report_lines.append("| # | Platform | Company | Job Title | Location | Match | Key Job Requirements | Direct Link |")
-        report_lines.append("|---|----------|---------|-----------|----------|:-----:|----------------------|:-----------:|")
+        report_lines.append("| # | Platform | Company | Job Title | Match | Key Requirements | Tailored Resume (Overleaf) | Cover Letter | Apply Link |")
+        report_lines.append("|---|----------|---------|-----------|:-----:|------------------|:--------------------------:|:------------:|:----------:|")
         
         for idx, job in enumerate(today_jobs, 1):
             title = job["title"]
             company = job["company"]
             platform = job.get("platform", "LinkedIn")
-            loc = job["location"] or "India / Remote"
             score = f"{job['match_score']:.0f}%"
-            reqs = job.get("requirements") or job.get("matched_skills") or "SQL, Python, Power BI, Advanced Excel"
+            reqs = job.get("requirements") or job.get("matched_skills") or "SQL, Python, Power BI"
             url = job["job_url"]
-            link_md = f"[Open Job ↗]({url})" if url else "N/A"
+            link_md = f"[Apply ↗]({url})" if url else "N/A"
             
-            report_lines.append(f"| {idx} | **{platform}** | **{company}** | {title} | {loc} | `{score}` | {reqs} | {link_md} |")
+            res_path = job.get("tailored_resume_path")
+            letter_path = job.get("cover_letter_path")
+            
+            if res_path:
+                norm_res = str(res_path).replace("\\", "/")
+                res_md = f"[Overleaf HTML 📄](file:///{norm_res})"
+            else:
+                res_md = f"[Default Overleaf 📄]({CANDIDATE_PROFILE['portfolio_url']}/resume.pdf)"
+                
+            if letter_path:
+                norm_let = str(letter_path).replace("\\", "/")
+                letter_md = f"[Cover Letter ✉️](file:///{norm_let})"
+            else:
+                letter_md = "Generated"
+            
+            report_lines.append(f"| {idx} | **{platform}** | **{company}** | {title} | `{score}` | {reqs} | {res_md} | {letter_md} | {link_md} |")
             
     report_lines.extend([
         f"",
